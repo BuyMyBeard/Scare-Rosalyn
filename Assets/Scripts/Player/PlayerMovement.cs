@@ -1,0 +1,61 @@
+using Cinemachine;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.PlasticSCM.Editor.WebApi;
+using UnityEngine;
+enum MonsterAnimations { Idle, Walking };
+
+[RequireComponent(typeof(PlayerInputs))]
+[RequireComponent(typeof(CharacterController))]
+public class PlayerMovement : MonoBehaviour
+{
+    [SerializeField] float walkSpeed = 1;
+    [SerializeField] float runMultiplier = 2;
+    [SerializeField] float gravitationnalAcceleration = 1;
+    float fallingSpeed = 0;
+    PlayerInputs inputs;
+    CharacterController controller;
+    Camera cam;
+    Animator animator;
+    MonsterAnimations currentAnimation;
+    void Awake()
+    {
+        inputs = GetComponent<PlayerInputs>();
+        controller = GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+        cam = Camera.main;
+    }
+
+    void Update()
+    {
+        Vector3 lookDirection = new Vector3(0, cam.transform.eulerAngles.y - 6.72f, 0);
+        transform.eulerAngles = lookDirection;
+        Vector3 movement = new Vector3(inputs.MoveInput.x, 0, inputs.MoveInput.y);
+        if (movement ==  Vector3.zero)
+        {
+            SetAnimation(MonsterAnimations.Idle);
+            return;
+        }
+        SetAnimation(MonsterAnimations.Walking);
+        float currentSpeed = walkSpeed;
+        if (inputs.RunInput && movement.z > 0)
+        {
+            animator.speed = runMultiplier;
+            movement.z *= runMultiplier;
+            currentSpeed *= runMultiplier;
+        }
+        else
+            animator.speed = 1;
+        movement = cam.transform.forward * movement.z + cam.transform.right * movement.x;
+        movement.y = 0;
+        controller.SimpleMove(currentSpeed * movement.normalized + fallingSpeed * Vector3.down);
+    }
+    void SetAnimation(MonsterAnimations animation)
+    {
+        if (currentAnimation != animation)
+        {
+            currentAnimation = animation;
+            animator.Play(currentAnimation.ToString());
+        }
+    }
+}

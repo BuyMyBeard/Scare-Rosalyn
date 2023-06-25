@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <created>2023-06-23T15:33:39Z</created>
+    <modified>2023-06-23T15:33:39Z</modified>
+    <revision>1.0</revision>
+  </asset>
+  <library_images>
+    <image id="LeverBase-diffuse-tex" name="LeverBase-diffuse-tex">
+      <init_from>Lever_res/Lever_LeverBase_diffuse.png</init_from>
+    </image>
+    <image id="LeverBase-emissive-tex" name="LeverBase-emissive-tex">
+      <init_from>Lever_res/Lever_LeverBase_emissive.png</init_from>
+    </image>
+    <image id="LeverRod-diffuse-tex" name="LeverRod-diffuse-tex">
+      <init_from>Lever_res/Lever_LeverRod_diffuse.png</init_from>
+    </image>
+    <image id="LeverRod-emissive-tex" name="LeverRod-emissive-tex">
+      <init_from>Lever_res/Lever_LeverRod_emissive.png</init_from>
+    </image>
+  </library_images>
+  <library_effects>
+    <effect id="LeverBase-Effect">
+      <profile_COMMON>
+        <newparam sid="LeverBase-diffuse-surface">
+          <surface type="2D">
+            <init_from>LeverBase-diffuse-tex</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="LeverBase-emissive-surface">
+          <surface type="2D">
+            <init_from>LeverBase-emissive-tex</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="LeverBase-diffuse-sampler">
+          <sampler2D>
+            <source>LeverBase-diffuse-surface</source>
+            <wrap_s>CLAMP</wrap_s>
+            <wrap_t>CLAMP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <newparam sid="LeverBase-emissive-sampler">
+          <sampler2D>
+            <source>LeverBase-emissive-surface</source>
+            <wrap_s>CLAMP</wrap_s>
+            <wrap_t>CLAMP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <technique sid="phong1">
+          <phong>
+            <emission>
+              <texture texcoord="LeverBase-tex-bind" texture="LeverBase-emissive-sampler"/>
+            </emission>
+            <ambient>
+              <color>1.0 1.0 1.0 1.0</color>
+            </ambient>
+            <diffuse>
+              <texture texcoord="LeverBase-tex-bind" texture="LeverBase-diffuse-sampler"/>
+            </diffuse>
+            <specular>
+              <color>0.0 0.0 0.0 1.0</color>
+            </specular>
+            <shininess>
+              <float>5.0</float>
+            </shininess>
+            <reflective>
+              <color>1.0 1.0 1.0 1.0</color>
+            </reflective>
+            <reflectivity>
+              <float>0.2</float>
+            </reflectivity>
+            <transparent>
+              <color>1.0 1.0 1.0 1.0</color>
+            </transparent>
+            <transparency>
+              <float>1.0</float>
+            </transparency>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="LeverRod-Effect">
+      <profile_COMMON>
+        <newparam sid="LeverRod-diffuse-surface">
+          <surface type="2D">
+            <init_from>LeverRod-diffuse-tex</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="LeverRod-emissive-surface">
+          <surface type="2D">
+            <init_from>LeverRod-emissive-tex</init_from>
+            <format>A8R8G8B8</format>
+          </surface>
+        </newparam>
+        <newparam sid="LeverRod-diffuse-sampler">
+          <sampler2D>
+            <source>LeverRod-diffuse-surface</source>
+            <wrap_s>CLAMP</wrap_s>
+            <wrap_t>CLAMP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <newparam sid="LeverRod-emissive-sampler">
+          <sampler2D>
+            <source>LeverRod-emissive-surface</source>
+            <wrap_s>CLAMP</wrap_s>
+            <wrap_t>CLAMP</wrap_t>
+            <minfilter>NONE</minfilter>
+            <magfilter>NONE</magfilter>
+            <mipfilter>NONE</mipfilter>
+          </sampler2D>
+        </newparam>
+        <technique sid="phong1">
+          <phong>
+            <emission>
+              <texture texcoord="LeverRod-tex-bind" texture="LeverRod-emissive-sampler"/>
+            </emission>
+            <ambient>
+              <color>1.0 1.0 1.0 1.0</color>
+            </ambient>
+            <diffuse>
+              <texture texcoord="LeverRod-tex-bind" texture="LeverRod-diffuse-sampler"/>
+            </diffuse>
+            <specular>
+              <color>0.0 0.0 0.0 1.0</color>
+            </specular>
+            <shininess>
+              <float>5.0</float>
+            </shininess>
+            <reflective>
+              <color>1.0 1.0 1.0 1.0</color>
+            </reflective>
+            <reflectivity>
+              <float>0.2</float>
+            </reflectivity>
+            <transparent>
+              <color>1.0 1.0 1.0 1.0</color>
+            </transparent>
+            <transparency>
+              <float>1.0</float>
+            </transparency>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="LeverBase-Material">
+      <instance_effect url="#LeverBase-Effect"/>
+    </material>
+    <material id="LeverRod-Material">
+      <instance_effect url="#LeverRod-Effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="LeverBase-Geom" name="LeverBase-Geom">
+      <mesh>
+        <source id="LeverBase-Pos">
+          <float_array count="72" id="LeverBase-Pos-array">-2.4999998 -4.5 0.5 -2.4999998 4.5 0.5 -2.4999998 4.5 -0.5 -2.4999998 -4.5 -0.5 2.4999998 -4.5 -0.5 2.4999998 4.5 -0.5 2.4999998 4.5 0.5 2.4999998 -4.5 0.5 -2.4999998 -4.5 -0.5 2.4999998 -4.5 -0.5 2.4999998 -4.5 0.5 -2.4999998 -4.5 0.5 -2.4999998 4.5 0.5 2.4999998 4.5 0.5 2.4999998 4.5 -0.5 -2.4999998 4.5 -0.5 -2.4999998 4.5 -0.5 2.4999998 4.5 -0.5 2.4999998 -4.5 -0.5 -2.4999998 -4.5 -0.5 -2.4999998 -4.5 0.5 2.4999998 -4.5 0.5 2.4999998 4.5 0.5 -2.4999998 4.5 0.5 </float_array>
+          <technique_common>
+            <accessor count="24" source="#LeverBase-Pos-array" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverBase-UV">
+          <float_array count="48" id="LeverBase-UV-array">0.0625 0.4375 0.0625 1.0 0.0 1.0 0.0 0.4375 0.0 0.4375 0.0 1.0 0.0625 1.0 0.0625 0.4375 0.0 0.6875 0.0 1.0 0.0625 1.0 0.0625 0.6875 0.0625 0.6875 0.0625 1.0 0.0 1.0 0.0 0.6875 0.1875 0.4375 0.5 0.4375 0.5 1.0 0.1875 1.0 0.1875 1.0 0.5 1.0 0.5 0.4375 0.1875 0.4375 </float_array>
+          <technique_common>
+            <accessor count="24" source="#LeverBase-UV-array" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverBase-Normal">
+          <float_array count="18" id="LeverBase-Normal-array">-1.0 0.0 0.0 1.0 0.0 0.0 0.0 -1.0 0.0 0.0 1.0 0.0 0.0 0.0 -1.0 0.0 0.0 1.0</float_array>
+          <technique_common>
+            <accessor count="6" source="#LeverBase-Normal-array" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="LeverBase-Vertices">
+          <input semantic="POSITION" source="#LeverBase-Pos"/>
+        </vertices>
+        <polylist count="6" material="LeverBase-Material">
+          <input offset="0" semantic="VERTEX" source="#LeverBase-Vertices"/>
+          <input offset="1" semantic="TEXCOORD" set="0" source="#LeverBase-UV"/>
+          <input offset="2" semantic="NORMAL" source="#LeverBase-Normal"/>
+          <vcount>4 4 4 4 4 4 </vcount>
+          <p>0 0 0 1 1 0 2 2 0 3 3 0 4 4 1 5 5 1 6 6 1 7 7 1 8 8 2 9 9 2 10 10 2 11 11 2 12 12 3 13 13 3 14 14 3 15 15 3 16 16 4 17 17 4 18 18 4 19 19 4 20 20 5 21 21 5 22 22 5 23 23 5 </p>
+        </polylist>
+      </mesh>
+    </geometry>
+    <geometry id="LeverRod-Geom" name="LeverRod-Geom">
+      <mesh>
+        <source id="LeverRod-Pos">
+          <float_array count="72" id="LeverRod-Pos-array">-0.5 -0.5 3.4999998 -0.5 0.5 3.4999998 -0.5 0.5 -3.4999998 -0.5 -0.5 -3.4999998 0.5 -0.5 -3.4999998 0.5 0.5 -3.4999998 0.5 0.5 3.4999998 0.5 -0.5 3.4999998 -0.5 -0.5 -3.4999998 0.5 -0.5 -3.4999998 0.5 -0.5 3.4999998 -0.5 -0.5 3.4999998 -0.5 0.5 3.4999998 0.5 0.5 3.4999998 0.5 0.5 -3.4999998 -0.5 0.5 -3.4999998 -0.5 0.5 -3.4999998 0.5 0.5 -3.4999998 0.5 -0.5 -3.4999998 -0.5 -0.5 -3.4999998 -0.5 -0.5 3.4999998 0.5 -0.5 3.4999998 0.5 0.5 3.4999998 -0.5 0.5 3.4999998 </float_array>
+          <technique_common>
+            <accessor count="24" source="#LeverRod-Pos-array" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverRod-UV">
+          <float_array count="48" id="LeverRod-UV-array">0.0 0.5625 0.0625 0.5625 0.0625 1.0 0.0 1.0 0.0 1.0 0.0625 1.0 0.0625 0.5625 0.0 0.5625 0.0 1.0 0.0625 1.0 0.0625 0.5625 0.0 0.5625 0.0 0.5625 0.0625 0.5625 0.0625 1.0 0.0 1.0 0.0 0.9375 0.0625 0.9375 0.0625 1.0 0.0 1.0 0.0 0.625 0.0625 0.625 0.0625 0.5625 0.0 0.5625 </float_array>
+          <technique_common>
+            <accessor count="24" source="#LeverRod-UV-array" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverRod-Normal">
+          <float_array count="18" id="LeverRod-Normal-array">-1.0 0.0 0.0 1.0 0.0 0.0 0.0 -1.0 0.0 0.0 1.0 0.0 0.0 0.0 -1.0 0.0 0.0 1.0</float_array>
+          <technique_common>
+            <accessor count="6" source="#LeverRod-Normal-array" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="LeverRod-Vertices">
+          <input semantic="POSITION" source="#LeverRod-Pos"/>
+        </vertices>
+        <polylist count="6" material="LeverRod-Material">
+          <input offset="0" semantic="VERTEX" source="#LeverRod-Vertices"/>
+          <input offset="1" semantic="TEXCOORD" set="0" source="#LeverRod-UV"/>
+          <input offset="2" semantic="NORMAL" source="#LeverRod-Normal"/>
+          <vcount>4 4 4 4 4 4 </vcount>
+          <p>0 0 0 1 1 0 2 2 0 3 3 0 4 4 1 5 5 1 6 6 1 7 7 1 8 8 2 9 9 2 10 10 2 11 11 2 12 12 3 13 13 3 14 14 3 15 15 3 16 16 4 17 17 4 18 18 4 19 19 4 20 20 5 21 21 5 22 22 5 23 23 5 </p>
+        </polylist>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_animations>
+    <animation id="LeverBase-global-anim" name="LeverBase-global-anim">
+      <animation>
+        <source id="LeverBase-global-anim-inSource-TIME">
+          <float_array count="1" id="LeverBase-global-anim-inSource-TIME-array">0.0 </float_array>
+          <technique_common>
+            <accessor count="1" source="#LeverBase-global-anim-inSource-TIME-array">
+              <param name="TIME" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverBase-global-anim-interpolation">
+          <Name_array count="1" id="LeverBase-global-anim-interpolation-array">LINEAR </Name_array>
+          <technique_common>
+            <accessor count="1" source="#LeverBase-global-anim-interpolation-array">
+              <param type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverBase-global-anim-outSource-global">
+          <float_array count="16" id="LeverBase-global-anim-outSource-global-array">1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 </float_array>
+          <technique_common>
+            <accessor count="1" source="#LeverBase-global-anim-outSource-global-array" stride="16">
+              <param type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <sampler id="LeverBase-global-anim-globalSampler">
+          <input semantic="INPUT" source="#LeverBase-global-anim-inSource-TIME"/>
+          <input semantic="OUTPUT" source="#LeverBase-global-anim-outSource-global"/>
+          <input semantic="INTERPOLATION" source="#LeverBase-global-anim-interpolation"/>
+        </sampler>
+        <channel source="#LeverBase-global-anim-globalSampler" target="LeverBase-global/matrix"/>
+      </animation>
+    </animation>
+    <animation id="LeverBase-local-anim" name="LeverBase-local-anim">
+      <animation>
+        <source id="LeverBase-local-anim-inSource-TIME">
+          <float_array count="1" id="LeverBase-local-anim-inSource-TIME-array">0.0 </float_array>
+          <technique_common>
+            <accessor count="1" source="#LeverBase-local-anim-inSource-TIME-array">
+              <param name="TIME" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverBase-local-anim-interpolation">
+          <Name_array count="1" id="LeverBase-local-anim-interpolation-array">LINEAR </Name_array>
+          <technique_common>
+            <accessor count="1" source="#LeverBase-local-anim-interpolation-array">
+              <param type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverBase-local-anim-outSource-local">
+          <float_array count="16" id="LeverBase-local-anim-outSource-local-array">1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 </float_array>
+          <technique_common>
+            <accessor count="1" source="#LeverBase-local-anim-outSource-local-array" stride="16">
+              <param type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <sampler id="LeverBase-local-anim-localSampler">
+          <input semantic="INPUT" source="#LeverBase-local-anim-inSource-TIME"/>
+          <input semantic="OUTPUT" source="#LeverBase-local-anim-outSource-local"/>
+          <input semantic="INTERPOLATION" source="#LeverBase-local-anim-interpolation"/>
+        </sampler>
+        <channel source="#LeverBase-local-anim-localSampler" target="LeverBase-local/matrix"/>
+      </animation>
+    </animation>
+    <animation id="LeverRod-global-anim" name="LeverRod-global-anim">
+      <animation>
+        <source id="LeverRod-global-anim-inSource-TIME">
+          <float_array count="1" id="LeverRod-global-anim-inSource-TIME-array">0.0 </float_array>
+          <technique_common>
+            <accessor count="1" source="#LeverRod-global-anim-inSource-TIME-array">
+              <param name="TIME" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverRod-global-anim-interpolation">
+          <Name_array count="1" id="LeverRod-global-anim-interpolation-array">LINEAR </Name_array>
+          <technique_common>
+            <accessor count="1" source="#LeverRod-global-anim-interpolation-array">
+              <param type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverRod-global-anim-outSource-global">
+          <float_array count="16" id="LeverRod-global-anim-outSource-global-array">1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 -1.0 0.0 0.0 0.0 1.0 </float_array>
+          <technique_common>
+            <accessor count="1" source="#LeverRod-global-anim-outSource-global-array" stride="16">
+              <param type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <sampler id="LeverRod-global-anim-globalSampler">
+          <input semantic="INPUT" source="#LeverRod-global-anim-inSource-TIME"/>
+          <input semantic="OUTPUT" source="#LeverRod-global-anim-outSource-global"/>
+          <input semantic="INTERPOLATION" source="#LeverRod-global-anim-interpolation"/>
+        </sampler>
+        <channel source="#LeverRod-global-anim-globalSampler" target="LeverRod-global/matrix"/>
+      </animation>
+    </animation>
+    <animation id="LeverRod-local-anim" name="LeverRod-local-anim">
+      <animation>
+        <source id="LeverRod-local-anim-inSource-TIME">
+          <float_array count="1" id="LeverRod-local-anim-inSource-TIME-array">0.0 </float_array>
+          <technique_common>
+            <accessor count="1" source="#LeverRod-local-anim-inSource-TIME-array">
+              <param name="TIME" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverRod-local-anim-interpolation">
+          <Name_array count="1" id="LeverRod-local-anim-interpolation-array">LINEAR </Name_array>
+          <technique_common>
+            <accessor count="1" source="#LeverRod-local-anim-interpolation-array">
+              <param type="name"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="LeverRod-local-anim-outSource-local">
+          <float_array count="16" id="LeverRod-local-anim-outSource-local-array">1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 4.0 0.0 0.0 0.0 1.0 </float_array>
+          <technique_common>
+            <accessor count="1" source="#LeverRod-local-anim-outSource-local-array" stride="16">
+              <param type="float4x4"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <sampler id="LeverRod-local-anim-localSampler">
+          <input semantic="INPUT" source="#LeverRod-local-anim-inSource-TIME"/>
+          <input semantic="OUTPUT" source="#LeverRod-local-anim-outSource-local"/>
+          <input semantic="INTERPOLATION" source="#LeverRod-local-anim-interpolation"/>
+        </sampler>
+        <channel source="#LeverRod-local-anim-localSampler" target="LeverRod-local/matrix"/>
+      </animation>
+    </animation>
+  </library_animations>
+  <library_visual_scenes>
+    <visual_scene id="DefaultScene">
+      <node id="World-global" name="World-global" sid="World-global">
+        <matrix sid="matrix">1.0 0.0 -8.742278E-8 0.0 0.0 1.0 0.0 0.0 -8.742278E-8 0.0 -1.0 0.0 0.0 0.0 0.0 1.0 </matrix>
+        <node id="LeverBase-global" name="LeverBase-global" sid="LeverBase-global">
+          <matrix sid="matrix">1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 </matrix>
+          <node id="LeverBase-local" name="LeverBase-local" sid="LeverBase-local">
+            <matrix sid="matrix">1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 </matrix>
+            <instance_geometry url="#LeverBase-Geom">
+              <bind_material>
+                <technique_common>
+                  <instance_material symbol="LeverBase-Material" target="#LeverBase-Material">
+                    <bind_vertex_input input_semantic="TEXCOORD" input_set="0" semantic="LeverBase-tex-bind"/>
+                  </instance_material>
+                </technique_common>
+              </bind_material>
+            </instance_geometry>
+          </node>
+          <node id="LeverRod-global" name="LeverRod-global" sid="LeverRod-global">
+            <matrix sid="matrix">1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 -1.0 0.0 0.0 0.0 1.0 </matrix>
+            <node id="LeverRod-local" name="LeverRod-local" sid="LeverRod-local">
+              <matrix sid="matrix">1.0 0.0 0.0 0.0 0.0 1.0 0.0 0.0 0.0 0.0 1.0 4.0 0.0 0.0 0.0 1.0 </matrix>
+              <instance_geometry url="#LeverRod-Geom">
+                <bind_material>
+                  <technique_common>
+                    <instance_material symbol="LeverRod-Material" target="#LeverRod-Material">
+                      <bind_vertex_input input_semantic="TEXCOORD" input_set="0" semantic="LeverRod-tex-bind"/>
+                    </instance_material>
+                  </technique_common>
+                </bind_material>
+              </instance_geometry>
+            </node>
+          </node>
+        </node>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#DefaultScene"/>
+  </scene>
+</COLLADA>
