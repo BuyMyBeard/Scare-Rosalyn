@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.007946722, g: 0.010700984, b: 0.013898352, a: 1}
+  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -26737,7 +26737,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-279798
+  m_Name: pb_Mesh-44624
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -30027,24 +30027,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f7c2f6c3911fb244a4cc789109cc50d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Settings:
-    Power: 10
-    Vignette:
-      Mode: 2
-      color: {r: 0.9622642, g: 0, b: 0, a: 1}
-      Texture:
-        Texture: {fileID: 0}
-      Procedural:
-        Radius: 4.08
-        Sharpness: 1.89
-    Noise:
-      Mode: 2
-      Texture:
-        Texture: {fileID: 0}
-        Scale: 1
-      UpdateTime: 0
-      Power: 0.5
-    EffectColor: {r: 0.73135453, g: 0.83363825, b: 1, a: 1}
 --- !u!1001 &966064796
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30600,14 +30582,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 622793872948471696, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1104427155343870780, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1465502287860977189, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -30619,10 +30593,6 @@ PrefabInstance:
     - target: {fileID: 3451424112086136017, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
       propertyPath: m_Name
       value: House
-      objectReference: {fileID: 0}
-    - target: {fileID: 3924554625852986512, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
-      propertyPath: m_Enabled
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4593113052260443547, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
       propertyPath: m_Mesh
@@ -30638,11 +30608,7 @@ PrefabInstance:
       objectReference: {fileID: 848518861}
     - target: {fileID: 7077929232523561996, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
       propertyPath: m_VersionIndex
-      value: 13608
-      objectReference: {fileID: 0}
-    - target: {fileID: 7105536632201577898, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
-      propertyPath: m_Enabled
-      value: 0
+      value: 13710
       objectReference: {fileID: 0}
     - target: {fileID: 8178595090633132645, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
       propertyPath: m_RootOrder
@@ -30694,7 +30660,7 @@ PrefabInstance:
       objectReference: {fileID: 1741493112}
     - target: {fileID: 8243873328518388267, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
       propertyPath: m_VersionIndex
-      value: 4157
+      value: 4259
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d29a087149a3fe147b94444ba5a6abbc, type: 3}
@@ -32664,6 +32630,17 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 894fd4e2cd7cfed4486cb271f80eb0ee, type: 3}
+--- !u!114 &1071430055 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4996168666163324087, guid: 11ca8e60d16815e489740d519d268697, type: 3}
+  m_PrefabInstance: {fileID: 4996168666272139609}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7943e361b1c43a45a16b0709a9e29c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1073031508 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8745706883626396150, guid: 894fd4e2cd7cfed4486cb271f80eb0ee, type: 3}
@@ -35799,7 +35776,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-282428
+  m_Name: pb_Mesh-47254
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -38525,7 +38502,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-277300
+  m_Name: pb_Mesh-42126
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -39613,6 +39590,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 147856727, guid: 5d9f3440e03d8e945830e0726f1873a6, type: 3}
+      propertyPath: monster
+      value: 
+      objectReference: {fileID: 1071430055}
+    - target: {fileID: 147856727, guid: 5d9f3440e03d8e945830e0726f1873a6, type: 3}
       propertyPath: fearMeter
       value: 
       objectReference: {fileID: 508119990}
@@ -39778,7 +39759,7 @@ PrefabInstance:
       objectReference: {fileID: 1200496118}
     - target: {fileID: 4988984937560596312, guid: 5d9f3440e03d8e945830e0726f1873a6, type: 3}
       propertyPath: m_VersionIndex
-      value: 11253
+      value: 11256
       objectReference: {fileID: 0}
     - target: {fileID: 5315187869352523008, guid: 5d9f3440e03d8e945830e0726f1873a6, type: 3}
       propertyPath: m_Name
@@ -46706,9 +46687,9 @@ MonoBehaviour:
   m_VerticalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 100
-    m_AccelTime: 0.05
-    m_DecelTime: 0.05
+    m_MaxSpeed: 300
+    m_AccelTime: 0.1
+    m_DecelTime: 0.1
     m_InputAxisName: Mouse Y
     m_InputAxisValue: 0
     m_InvertInput: 1
@@ -46730,9 +46711,9 @@ MonoBehaviour:
   m_HorizontalAxis:
     Value: 0
     m_SpeedMode: 0
-    m_MaxSpeed: 200
-    m_AccelTime: 0.05
-    m_DecelTime: 0.05
+    m_MaxSpeed: 300
+    m_AccelTime: 0.1
+    m_DecelTime: 0.1
     m_InputAxisName: Mouse X
     m_InputAxisValue: 0
     m_InvertInput: 0
@@ -51694,7 +51675,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-279812
+  m_Name: pb_Mesh-44638
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -63444,7 +63425,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh-277314
+  m_Name: pb_Mesh-42140
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -64000,6 +63981,26 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4996168666163324080, guid: 11ca8e60d16815e489740d519d268697, type: 3}
+      propertyPath: m_Height
+      value: 2.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996168666163324080, guid: 11ca8e60d16815e489740d519d268697, type: 3}
+      propertyPath: m_Center.y
+      value: 0.48
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996168666163324080, guid: 11ca8e60d16815e489740d519d268697, type: 3}
+      propertyPath: m_Center.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996168666163324083, guid: 11ca8e60d16815e489740d519d268697, type: 3}
+      propertyPath: m_Height
+      value: 2.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4996168666163324083, guid: 11ca8e60d16815e489740d519d268697, type: 3}
+      propertyPath: m_Center.y
+      value: 0.48
+      objectReference: {fileID: 0}
     - target: {fileID: 4996168666163324084, guid: 11ca8e60d16815e489740d519d268697, type: 3}
       propertyPath: m_RootOrder
       value: 7
@@ -64044,6 +64045,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4996168666163324087, guid: 11ca8e60d16815e489740d519d268697, type: 3}
+      propertyPath: firstPersonCamera
+      value: 
+      objectReference: {fileID: 1905366795}
+    - target: {fileID: 4996168666163324087, guid: 11ca8e60d16815e489740d519d268697, type: 3}
+      propertyPath: firstPersonCameraInputs
+      value: 
+      objectReference: {fileID: 1905366797}
     - target: {fileID: 4996168666163324094, guid: 11ca8e60d16815e489740d519d268697, type: 3}
       propertyPath: m_Name
       value: Monster

@@ -2,6 +2,7 @@ using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
+using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 enum MonsterAnimations { Idle, Walking };
 
@@ -12,7 +13,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float walkSpeed = 1;
     [SerializeField] float runMultiplier = 2;
     [SerializeField] float gravitationnalAcceleration = 1;
+    [SerializeField] float frozenLength = 3;
+    [SerializeField] CinemachineVirtualCamera firstPersonCamera;
+    CinemachineInputProvider firstPersonCameraInputs;
     float fallingSpeed = 0;
+    bool frozen;
     PlayerInputs inputs;
     CharacterController controller;
     Camera cam;
@@ -24,10 +29,13 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         cam = Camera.main;
+        firstPersonCameraInputs = firstPersonCamera.GetComponent<CinemachineInputProvider>();
     }
 
     void Update()
     {
+        if (frozen)
+            return;
         Vector3 lookDirection = new Vector3(0, cam.transform.eulerAngles.y - 6.72f, 0);
         transform.eulerAngles = lookDirection;
         Vector3 movement = new Vector3(inputs.MoveInput.x, 0, inputs.MoveInput.y);
@@ -57,5 +65,22 @@ public class PlayerMovement : MonoBehaviour
             currentAnimation = animation;
             animator.Play(currentAnimation.ToString());
         }
+    }
+    public void Freeze(Transform victimToLookAt)
+    {
+        StartCoroutine(FreezePlayer(victimToLookAt));
+    }
+    IEnumerator FreezePlayer(Transform victimToLookAt)
+    {
+        SetAnimation(MonsterAnimations.Idle);
+        frozen = true;
+        firstPersonCameraInputs.enabled = false;
+        //firstPersonCamera.LookAt = victimToLookAt;
+        
+        yield return new WaitForSeconds(frozenLength);
+        frozen = false;
+        //firstPersonCamera.LookAt = null;
+        firstPersonCameraInputs.enabled = true;
+
     }
 }

@@ -6,7 +6,7 @@ public class Car : Objective
 {
     public override void InteractionOver()
     {
-
+        Check();
     }
     private void OnTriggerEnter(Collider other)
     {

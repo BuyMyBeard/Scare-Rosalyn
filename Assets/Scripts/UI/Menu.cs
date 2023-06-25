@@ -4,16 +4,15 @@ using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MainMenu : MonoBehaviour
+public class Menu : MonoBehaviour
 {
     public void Play()
     {
         SceneManager.LoadScene("Map");
     }
-
-    public void HowToPlay()
+    public void MainMenu()
     {
-
+        SceneManager.LoadScene("Main Menu");
     }
 
     public void Quit()

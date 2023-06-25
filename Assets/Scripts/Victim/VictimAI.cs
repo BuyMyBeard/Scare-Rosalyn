@@ -6,20 +6,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations;
 using UnityEngine.UI;
-
-
-public abstract class Objective : MonoBehaviour
-{
-    public Transform objectivePosition;
-    public bool found = false;
-    [SerializeField] int collectibleId;
-    [SerializeField] CheckboxList checkboxList;
-    public abstract void InteractionOver();
-    protected void Check()
-    {
-        checkboxList.Check(collectibleId);
-    }
-}
 enum Animations { Walking, LookingAround, Fleeing, Spooked, Interact };
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -41,6 +27,7 @@ public class VictimAI : MonoBehaviour
     [SerializeField] float escapeSpeed = 0;
     [SerializeField] float frozenLength = 1;
     [SerializeField] Slider fearMeter;
+    [SerializeField] PlayerMovement monster;
 
     [Header("Objective")]
     [SerializeField] Objective[] objectives;
@@ -183,6 +170,7 @@ public class VictimAI : MonoBehaviour
     }
     IEnumerator RunAway(Vector3 monsterLocation)
     {
+        monster.Freeze(transform);
         spooked = true;
         agent.isStopped = true;
         Vector3 lookDirection = monsterLocation - transform.position;
@@ -252,7 +240,7 @@ public class VictimAI : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         objective.InteractionOver();
         yield return new WaitForSeconds(1);
-        objective.found = true;
+        objective.done = true;
         agent.destination = FindNewObjective().objectivePosition.position;
         animator.Play(Animations.Walking.ToString());
         agent.isStopped = false;
@@ -262,12 +250,12 @@ public class VictimAI : MonoBehaviour
 
     Objective FindNewObjective()
     {
-        if (objectives.All(o => o.found))
+        if (objectives.All(o => o.done))
             return finalObjective;
         while (true)
         {
             Objective objective = objectives[Random.Range(0, objectives.Length)];
-            if (!objective.found)
+            if (!objective.done)
                 return objective;
         }
     }
