@@ -209,6 +209,7 @@ MonoBehaviour:
   escapeSpeed: 0
   frozenLength: 1
   fearMeter: {fileID: 0}
+  monster: {fileID: 0}
   objectives: []
   finalObjective: {fileID: 0}
   walkSpeed: 0

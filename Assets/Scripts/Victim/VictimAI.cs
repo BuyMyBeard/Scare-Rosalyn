@@ -122,7 +122,9 @@ public class VictimAI : MonoBehaviour
         if (spooked)
             return;
         Vector3 direction = other.transform.position - transform.position;
-        Physics.Raycast(transform.position, direction, out RaycastHit obstructionHit, 50, obstructionLayer);
+        float length = (other.transform.position - transform.position).magnitude; 
+        Physics.Raycast(transform.position + Vector3.up * 1.30f, direction, out RaycastHit obstructionHit, length, obstructionLayer);
+        Debug.DrawRay(transform.position, direction);
         if (obstructionHit.collider != null)
         {
             if (monsterInLOS)

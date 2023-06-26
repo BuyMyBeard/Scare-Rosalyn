@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 
-public abstract class Interactable : MonoBehaviour, IComparer<Interactable>
+public abstract class Interactable : MonoBehaviour
 {
     ButtonPrompt buttonPrompt;
     public string promptMessage = "Interact";
@@ -21,17 +22,6 @@ public abstract class Interactable : MonoBehaviour, IComparer<Interactable>
         buttonPrompt.CancelPrompt(this);
     }    
     public abstract void Interact();
-
-    public int Compare(Interactable x, Interactable y)
-    {
-        float distanceX = (x.transform.position - transform.position).magnitude;
-        float distanceY = (y.transform.position - transform.position).magnitude;
-        if (distanceX == distanceY)
-            return 0;
-        else if (distanceX > distanceY)
-            return 1;
-        return -1;
-    }
 }
 public class ButtonPrompt : MonoBehaviour
 {
@@ -48,14 +38,17 @@ public class ButtonPrompt : MonoBehaviour
     }
     void Update()
     {
+        
         if (currentPrompt != null && inputs.InteractPress)
         {
             currentPrompt.Interact();
             CancelPrompt(currentPrompt);
             currentPrompt = null;
             HidePrompt();
+            StartCoroutine(Cooldown());
         }
     }
+
     void LateUpdate()
     {
         if (possiblePrompts.Count == 0)
@@ -67,10 +60,27 @@ public class ButtonPrompt : MonoBehaviour
             }    
             return;
         }
-        possiblePrompts.Sort();
-        if (possiblePrompts.First() == currentPrompt)
-            return;
-        currentPrompt = possiblePrompts.First();
+        if (possiblePrompts.Count == 1)
+        {
+            if (possiblePrompts.First() == currentPrompt)
+                return;
+            currentPrompt = possiblePrompts.First();
+        }
+        else
+        {
+            Interactable closestPrompt = possiblePrompts.First();
+            float shortestDistance = (transform.position - closestPrompt.transform.position).magnitude;
+            for (int i = 1; i < possiblePrompts.Count; i++)
+            {
+                float distance = (transform.position - possiblePrompts[i].transform.position).magnitude;
+                if (distance < shortestDistance)
+                {
+                    shortestDistance = distance;
+                    closestPrompt = possiblePrompts[i];
+                }
+            }
+            currentPrompt = closestPrompt;
+        }
         ShowPrompt(currentPrompt.promptMessage);
     }
     public void ProposePrompt(Interactable interactable)
