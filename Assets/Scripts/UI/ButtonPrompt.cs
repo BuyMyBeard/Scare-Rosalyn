@@ -31,6 +31,7 @@ public class ButtonPrompt : MonoBehaviour
     List<Interactable> possiblePrompts = new();
     Interactable currentPrompt;
     PlayerInputs inputs;
+    bool onCooldown = false;
 
     void Awake()
     {
@@ -39,7 +40,7 @@ public class ButtonPrompt : MonoBehaviour
     void Update()
     {
         
-        if (currentPrompt != null && inputs.InteractPress)
+        if (!onCooldown && currentPrompt != null && inputs.InteractPress)
         {
             currentPrompt.Interact();
             CancelPrompt(currentPrompt);
@@ -49,6 +50,12 @@ public class ButtonPrompt : MonoBehaviour
         }
     }
 
+    IEnumerator Cooldown()
+    {
+        onCooldown = true;
+        yield return new WaitForSeconds(cooldown);
+        onCooldown = false;
+    }
     void LateUpdate()
     {
         if (possiblePrompts.Count == 0)
