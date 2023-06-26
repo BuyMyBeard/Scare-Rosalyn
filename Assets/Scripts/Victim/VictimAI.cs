@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
+using System.Xml.Schema;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations;
+using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
-enum Animations { Walking, LookingAround, Fleeing, Spooked, Interact };
+enum Animations { Walking, LookingAround, Fleeing, Spooked, Interact, Idle, Sitting };
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
@@ -15,34 +18,49 @@ public class VictimAI : MonoBehaviour
 {
     [Header("Detection")]
     [SerializeField] Transform goal;
-    [SerializeField] float detectionCoefficient = 1;
+    [SerializeField] float detectionRate = 1;
     [SerializeField] float detectionDecayRate = 0.1f;
     [SerializeField] float detectionLingerLength = 2;
     [SerializeField] Slider detectionMeter;
     [SerializeField] LayerMask obstructionLayer;
+    [SerializeField] LayerMask glassLayer;
+    [SerializeField] float detectionSoftRange = 5;
+    [SerializeField] float roarHearRange = 15;
 
     [Header("Spooked")]
 
-    [SerializeField] float escapeDistance = 20;
+    //[SerializeField] float escapeDistance = 20;
     [SerializeField] float escapeSpeed = 0;
     [SerializeField] float frozenLength = 1;
+    [SerializeField] float fleeingLength = 5;
     [SerializeField] Slider fearMeter;
     [SerializeField] PlayerMovement monster;
+    [SerializeField] LayerMask monsterLayer;
+
 
     [Header("Objective")]
     [SerializeField] Objective[] objectives;
-    [SerializeField] Objective finalObjective;
     [SerializeField] float walkSpeed = 0;
     [SerializeField] float minDistanceFromTarget = 0.2f;
     [SerializeField] LayerMask groundLayer;
-    [SerializeField] float raycastStartHeight;
-    [SerializeField] float raycastLength;
+    //[SerializeField] float raycastStartHeight;
+    //[SerializeField] float raycastLength;
     [SerializeField] float openDoorAnimationLength;
-
+    
 
     [Header("Debug")]
-    public bool monsterInLOS = false, spooked = false, idle = false;
+    public float timeElapsedDetection = 0;
+    public bool monsterInLOS = false, spooked = false, idle = false, lookingAround = false;
+    public bool monsterHasRoared = false, lookingThroughGlass = false;
+    int jumpscareCount = 0;
     float detectionProgress = 0;
+    Animations currentAnimation = Animations.Idle;
+    int nextObjective = 0;
+
+    public Objective CurrentObjective
+    {
+        get => objectives[nextObjective - 1];
+    }
     float DetectionProgress 
     {
         get => detectionProgress;
@@ -63,6 +81,11 @@ public class VictimAI : MonoBehaviour
             fearMeter.value = value;
         }
     }
+
+    float DistanceFromMonster
+    {
+        get => (transform.position - monster.transform.position).magnitude;
+    }
     bool ReachedDestination
     {
         get => agent.remainingDistance < minDistanceFromTarget;
@@ -71,7 +94,7 @@ public class VictimAI : MonoBehaviour
     NavMeshAgent agent;
     Animator animator;
     Expression expression;
-    IEnumerator detectionDecayCoroutine, lookAroundCoroutine;
+    IEnumerator detectionDecayCoroutine, periodicallyLookAroundCoroutine;
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -82,41 +105,58 @@ public class VictimAI : MonoBehaviour
     {
         agent.destination = FindNewObjective().transform.position;
         agent.speed = walkSpeed;
-        lookAroundCoroutine = LookAround();
-        StartCoroutine(lookAroundCoroutine);
+        periodicallyLookAroundCoroutine = PeriodicallyLookAround();
+        StartCoroutine(periodicallyLookAroundCoroutine);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        UpdateTimeElapsed();
         if (!agent.isStopped)
         {
+            if (spooked)
+                SetAnimation(Animations.Fleeing);
+            else
+                SetAnimation(Animations.Walking);
+            
             Vector3 lookDirection = new Vector3(agent.desiredVelocity.x, 0, agent.desiredVelocity.z);
             transform.rotation = Quaternion.LookRotation(lookDirection == Vector3.zero ? Vector3.forward : lookDirection, Vector3.up);
         }
-        else
+    }
+    void UpdateTimeElapsed()
+    {
+        if (DetectionProgress <= 0)
         {
-            if (ReachedDestination && !idle)
-            {
-                animator.Play("Idle");
-                idle = true;
-            }
+            timeElapsedDetection = 0;
+            monsterHasRoared = false;
+        }
+        else
+            timeElapsedDetection += Time.deltaTime;
+
+    }
+    IEnumerator PeriodicallyLookAround()
+    {
+        while (true)
+        {
+            float nextStop = Random.Range(8, 15);
+            yield return new WaitForSeconds(nextStop);
+            if (currentAnimation == Animations.Walking)
+                StartCoroutine(LookAround());
         }
     }
     IEnumerator LookAround()
     {
-        while (true)
-        {
-            animator.Play(Animations.Walking.ToString());
-            float nextStop = Random.Range(10, 30);
-            yield return new WaitForSeconds(nextStop);
-            animator.Play(Animations.LookingAround.ToString());
-            agent.isStopped = true;
-            yield return new WaitForSeconds(3.75f);
-            agent.isStopped = false;
-        }
+        lookingAround = true;
+        animator.Play(Animations.LookingAround.ToString());
+        agent.isStopped = true;
+        yield return new WaitForSeconds(3.75f);
+        agent.isStopped = false;
+        animator.Play(Animations.Walking.ToString());
+        lookingAround = false;
     }
+
+
     public void DetectMonster(Collider other)
     {
         if (spooked)
@@ -124,6 +164,7 @@ public class VictimAI : MonoBehaviour
         Vector3 direction = other.transform.position - transform.position;
         float length = (other.transform.position - transform.position).magnitude; 
         Physics.Raycast(transform.position + Vector3.up * 1.30f, direction, out RaycastHit obstructionHit, length, obstructionLayer);
+        Physics.Raycast(transform.position + Vector3.up * 1.30f, direction, out RaycastHit glassHit, length, glassLayer);
         Debug.DrawRay(transform.position, direction);
         if (obstructionHit.collider != null)
         {
@@ -131,6 +172,7 @@ public class VictimAI : MonoBehaviour
                 StopDetectingMonster();
             return;
         }
+        lookingThroughGlass = glassHit.collider != null;
         if (!monsterInLOS)
         {
             monsterInLOS = true;
@@ -140,13 +182,21 @@ public class VictimAI : MonoBehaviour
                 detectionDecayCoroutine = null;
             }
         }
-
-        DetectionProgress += detectionCoefficient / direction.magnitude;
+        float multiplier = 1;
+        if (direction.magnitude < detectionSoftRange)
+            multiplier *= 4;
+        else if (lookingAround)
+            multiplier *= 8;
+        DetectionProgress += Time.deltaTime * multiplier * detectionRate;
+        CheckDetectionProgress(other.transform);
+    }
+    public void CheckDetectionProgress(Transform monster)
+    {
         if (DetectionProgress >= 1)
         {
             DetectionProgress = 1;
             StopAllCoroutines();
-            StartCoroutine(RunAway(other.transform.position));
+            StartCoroutine(RunAway(monster.position));
         }
     }
 
@@ -170,8 +220,38 @@ public class VictimAI : MonoBehaviour
         if (detectionDecayRate < 0)
             detectionDecayRate = 0;
     }
+    void RaiseFear()
+    {
+        float increase = 0;
+        Debug.Log(timeElapsedDetection);
+        if (monsterHasRoared)
+            increase += 0.01f;
+        if (lookingThroughGlass)
+            increase += 0.1f;
+        if (DistanceFromMonster > 10)
+            increase += 0.01f;
+        else if (timeElapsedDetection > 1.5)
+            increase += 0.01f;
+        else if (timeElapsedDetection > 1)
+            increase += 0.05f;
+        else if (timeElapsedDetection > 0.5f)
+            increase += 0.2f;
+        StartCoroutine(RaiseProgressBarOverTime(increase));
+    }
+
+    public IEnumerator RaiseProgressBarOverTime(float increase)
+    {
+        const float Length = 2;
+        for (float t = 0; t < Length; t += Time.deltaTime)
+        {
+            FearLevel += increase * Time.deltaTime / Length;
+            yield return null;
+        }
+    }
+
     IEnumerator RunAway(Vector3 monsterLocation)
     {
+        RaiseFear();
         monster.Freeze(transform);
         spooked = true;
         agent.isStopped = true;
@@ -184,34 +264,30 @@ public class VictimAI : MonoBehaviour
 
         agent.isStopped = false;
         agent.speed = escapeSpeed;
-        animator.Play(Animations.Fleeing.ToString());
-        agent.destination = FindEscapeLocation();
-        
-        yield return new WaitUntil(() => ReachedDestination);
+
+        yield return new WaitForSeconds(fleeingLength - frozenLength);
         DetectionProgress = 0;
         agent.speed = walkSpeed;
-        agent.destination = FindNewObjective().transform.position;
         spooked = false;
-        animator.Play(Animations.Walking.ToString());
         expression.ChangeExpression(Expressions.Neutral);
     }
 
-    Vector3 FindEscapeLocation()
-    {
-        const int MAX_ITERATIONS = 50;
-        int i = 0;
-        while (true)
-        {
-            i++;
-            if (i >= MAX_ITERATIONS)
-                return agent.destination;
+    //Vector3 FindEscapeLocation()
+    //{
+    //    const int MAX_ITERATIONS = 50;
+    //    int i = 0;
+    //    while (true)
+    //    {
+    //        i++;
+    //        if (i >= MAX_ITERATIONS)
+    //            return agent.destination;
 
-            Vector2 direction = Random.insideUnitCircle.normalized * escapeDistance;
-            Vector3 rayOrigin = transform.position + new Vector3(direction.x, raycastStartHeight, direction.y);
-            if (Physics.Raycast(rayOrigin, Vector3.down, out var hit, raycastLength, groundLayer))
-                return hit.point;
-        }
-    }
+    //        Vector2 direction = Random.insideUnitCircle.normalized * escapeDistance;
+    //        Vector3 rayOrigin = transform.position + new Vector3(direction.x, raycastStartHeight, direction.y);
+    //        if (Physics.Raycast(rayOrigin, Vector3.down, out var hit, raycastLength, groundLayer))
+    //            return hit.point;
+    //    }
+    //}
 
     public void OpenDoor()
     {
@@ -220,46 +296,96 @@ public class VictimAI : MonoBehaviour
     IEnumerator OpenDoorAnimation()
     {
         agent.isStopped = true;
-        StopCoroutine(lookAroundCoroutine);
-        animator.Play(Animations.Interact.ToString());
+        SetAnimation(Animations.Interact);
         yield return new WaitForSeconds(openDoorAnimationLength);
-        animator.Play(Animations.Walking.ToString());
         agent.isStopped = false;
-        lookAroundCoroutine = LookAround();
-        StartCoroutine(lookAroundCoroutine);
     }
-    public void InteractWithObjective(Objective objective)
-    {
-        if (spooked)
-            return;
-        StartCoroutine(InteractWithObjectiveAnimation(objective));
-    }
+    public void StartInteractWithObjectiveAnimation(Objective objective) => StartCoroutine(InteractWithObjectiveAnimation(objective));
+    public void StartWaitAround(Objective objective) => StartCoroutine(WaitAround(objective));
+    public void StartSit(Objective objective) => StartCoroutine(Sit(objective));
     IEnumerator InteractWithObjectiveAnimation(Objective objective)
     {
         agent.isStopped = true;
-        StopCoroutine(lookAroundCoroutine);
-        animator.Play(Animations.Interact.ToString());
+        transform.eulerAngles = new Vector3(0, objective.angleToLookAt, 0);
+        SetAnimation(Animations.Interact);
         yield return new WaitForSeconds(0.5f);
         objective.InteractionOver();
         yield return new WaitForSeconds(1);
         objective.done = true;
         agent.destination = FindNewObjective().objectivePosition.position;
-        animator.Play(Animations.Walking.ToString());
         agent.isStopped = false;
-        lookAroundCoroutine = LookAround();
-        StartCoroutine(lookAroundCoroutine);
+    }
+
+    IEnumerator WaitAround(Objective objective)
+    {
+        if (spooked || FearLevel > 0.3f)
+        {
+            agent.destination = FindNewObjective().objectivePosition.position;
+            objective.done = true;
+            yield break;
+        }
+        agent.isStopped = true;
+        SetAnimation(Animations.Idle);
+        transform.eulerAngles = new Vector3(0, objective.angleToLookAt, 0);
+        agent.destination = FindNewObjective().objectivePosition.position;
+        objective.done = true;
+        yield return new WaitForSeconds(objective.waitTime);
+        agent.isStopped = false;
+    }
+
+    IEnumerator Sit(Objective objective)
+    {
+        if (spooked || FearLevel > 0.3f)
+        {
+            agent.destination = FindNewObjective().objectivePosition.position;
+            objective.done = true;
+            yield break;
+        }
+        transform.eulerAngles = new Vector3(0, objective.angleToLookAt, 0);
+        agent.isStopped = true;
+        SetAnimation(Animations.Sitting);
+        objective.done = true;
+        agent.destination = FindNewObjective().objectivePosition.position;
+        yield return new WaitForSeconds(objective.waitTime);
+        agent.isStopped = false;
     }
 
     Objective FindNewObjective()
     {
-        if (objectives.All(o => o.done))
-            return finalObjective;
-        while (true)
+        return objectives[nextObjective++];
+        
+    }
+    public void MonsterVeryClose()
+    {
+        if (!spooked)
         {
-            Objective objective = objectives[Random.Range(0, objectives.Length)];
-            if (!objective.done)
-                return objective;
+            DetectionProgress += 2 * Time.deltaTime;
+            CheckDetectionProgress(monster.transform);
         }
     }
-
+    public void DetectMonsterRoar()
+    {
+        float distance = DistanceFromMonster;
+        if (distance > roarHearRange)
+            return;
+        monsterHasRoared = true;
+        if (distance < 5)
+            DetectionProgress += 1;
+        else
+        {
+            DetectionProgress += 0.25f;
+            if (Vector3.Dot(monster.transform.position - transform.position, transform.forward) <= 0)
+                transform.Rotate(0, 180, 0);
+            StartCoroutine(LookAround());
+        }
+        CheckDetectionProgress(monster.transform);
+    }
+    void SetAnimation(Animations animation)
+    {
+        if (currentAnimation != animation)
+        {
+            currentAnimation = animation;
+            animator.Play(animation.ToString());
+        }
+    }
 }

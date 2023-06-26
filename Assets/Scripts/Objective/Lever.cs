@@ -28,6 +28,8 @@ public class Lever : Objective
 
     private void OnTriggerEnter(Collider other)
     {
-        other.GetComponent<VictimAI>().InteractWithObjective(this);
+        VictimAI ai = other.GetComponent<VictimAI>();
+        if (ai.CurrentObjective == this)
+            ai.StartInteractWithObjectiveAnimation(this);
     }
 }

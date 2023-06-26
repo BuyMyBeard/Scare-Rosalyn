@@ -6,6 +6,8 @@ public abstract class Objective : MonoBehaviour
 {
     public Transform objectivePosition;
     public bool done = false;
+    public int angleToLookAt = 0;
+    public int waitTime = 0;
     [SerializeField] int collectibleId;
     [SerializeField] CheckboxList checkboxList;
 

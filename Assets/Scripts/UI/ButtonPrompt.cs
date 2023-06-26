@@ -28,7 +28,8 @@ public class ButtonPrompt : MonoBehaviour
     [SerializeField] TextMeshProUGUI textPrompt;
     [SerializeField] GameObject[] display;
     [SerializeField] float cooldown = 0.5f;
-    List<Interactable> possiblePrompts = new();
+    [SerializeField] Transform monster;
+    public List<Interactable> possiblePrompts = new();
     Interactable currentPrompt;
     PlayerInputs inputs;
     bool onCooldown = false;
@@ -40,22 +41,22 @@ public class ButtonPrompt : MonoBehaviour
     void Update()
     {
         
-        if (!onCooldown && currentPrompt != null && inputs.InteractPress)
+        if (currentPrompt != null && inputs.InteractPress)
         {
             currentPrompt.Interact();
             CancelPrompt(currentPrompt);
             currentPrompt = null;
             HidePrompt();
-            StartCoroutine(Cooldown());
+            //StartCoroutine(Cooldown());
         }
     }
 
-    IEnumerator Cooldown()
-    {
-        onCooldown = true;
-        yield return new WaitForSeconds(cooldown);
-        onCooldown = false;
-    }
+    //IEnumerator Cooldown()
+    //{
+    //    onCooldown = true;
+    //    yield return new WaitForSeconds(cooldown);
+    //    onCooldown = false;
+    //}
     void LateUpdate()
     {
         if (possiblePrompts.Count == 0)
@@ -76,10 +77,10 @@ public class ButtonPrompt : MonoBehaviour
         else
         {
             Interactable closestPrompt = possiblePrompts.First();
-            float shortestDistance = (transform.position - closestPrompt.transform.position).magnitude;
+            float shortestDistance = (monster.position - closestPrompt.transform.position).magnitude;
             for (int i = 1; i < possiblePrompts.Count; i++)
             {
-                float distance = (transform.position - possiblePrompts[i].transform.position).magnitude;
+                float distance = (monster.position - possiblePrompts[i].transform.position).magnitude;
                 if (distance < shortestDistance)
                 {
                     shortestDistance = distance;
@@ -92,7 +93,8 @@ public class ButtonPrompt : MonoBehaviour
     }
     public void ProposePrompt(Interactable interactable)
     {
-        possiblePrompts.Add(interactable);
+        if (!possiblePrompts.Contains(interactable))
+            possiblePrompts.Add(interactable);
     }
     public void CancelPrompt(Interactable interactable)
     {

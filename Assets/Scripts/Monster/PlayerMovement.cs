@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
+using UnityEngine.AI;
+
 enum MonsterAnimations { Idle, Walking };
 
 [RequireComponent(typeof(PlayerInputs))]
@@ -12,17 +14,17 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] float walkSpeed = 1;
     [SerializeField] float runMultiplier = 2;
-    [SerializeField] float gravitationnalAcceleration = 1;
     [SerializeField] float frozenLength = 3;
     [SerializeField] CinemachineVirtualCamera firstPersonCamera;
     CinemachineInputProvider firstPersonCameraInputs;
     float fallingSpeed = 0;
-    bool frozen;
+    public bool frozen;
     PlayerInputs inputs;
     CharacterController controller;
     Camera cam;
     Animator animator;
     MonsterAnimations currentAnimation;
+    //NavMeshObstacle obstacle;
     void Awake()
     {
         inputs = GetComponent<PlayerInputs>();
@@ -30,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         cam = Camera.main;
         firstPersonCameraInputs = firstPersonCamera.GetComponent<CinemachineInputProvider>();
+        //obstacle = GetComponent<NavMeshObstacle>();
     }
 
     void Update()
@@ -72,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
     }
     IEnumerator FreezePlayer(Transform victimToLookAt)
     {
+        //obstacle.enabled = true;
         SetAnimation(MonsterAnimations.Idle);
         frozen = true;
         firstPersonCameraInputs.enabled = false;
@@ -81,6 +85,6 @@ public class PlayerMovement : MonoBehaviour
         frozen = false;
         //firstPersonCamera.LookAt = null;
         firstPersonCameraInputs.enabled = true;
-
+        //obstacle.enabled = false;
     }
 }

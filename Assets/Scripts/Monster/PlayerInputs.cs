@@ -8,7 +8,6 @@ public class PlayerInputs : MonoBehaviour
     [SerializeField] float inputBuffer = 0.1f;
     InputAction runAction, roarAction, interactAction;
     InputMap inputs;
-    int i = 0;
     void Awake()
     {
         inputs = new InputMap();

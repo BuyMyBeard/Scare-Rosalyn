@@ -15,7 +15,6 @@ public class Door : Interactable
     [SerializeField] NavMeshObstacle obstacle;
     Animator animator;
     BoxCollider doorTrigger;
-    bool interactive = true;
     bool opened = false;
 
 
