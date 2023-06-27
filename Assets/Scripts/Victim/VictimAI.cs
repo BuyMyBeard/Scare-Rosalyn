@@ -7,9 +7,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Animations;
-using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
-enum Animations { Walking, LookingAround, Fleeing, Spooked, Interact, Idle, Sitting };
+enum Animations { Walking, LookingAround, Fleeing, Spooked, Interact, Idle, Sitting, Dying };
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
@@ -59,6 +58,8 @@ public class VictimAI : MonoBehaviour
     Animations currentAnimation = Animations.Idle;
     int nextObjective = 0;
     AudioManager audioManager;
+    AudioSource audioSource;
+    [SerializeField]AudioClip walkSound, runSound;
 
     public Objective CurrentObjective
     {
@@ -98,12 +99,15 @@ public class VictimAI : MonoBehaviour
     Animator animator;
     Expression expression;
     IEnumerator detectionDecayCoroutine, periodicallyLookAroundCoroutine;
+    Camera camera;
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
-       expression = GetComponent<Expression>();
+        expression = GetComponent<Expression>();
         audioManager = GetComponent<AudioManager>();
+        camera = GetComponentInChildren<Camera>();
+        audioSource = GetComponent<AudioSource>();
     }
     private void OnEnable()
     {
@@ -120,13 +124,30 @@ public class VictimAI : MonoBehaviour
         if (!agent.isStopped)
         {
             if (spooked)
+            {
                 SetAnimation(Animations.Fleeing);
+                if (audioSource.clip != runSound || !audioSource.isPlaying)
+                {
+                    audioSource.clip = runSound;
+                    audioSource.Play();
+                }
+            }
             else
+            {
                 SetAnimation(Animations.Walking);
-            
+                if (audioSource.clip != walkSound || !audioSource.isPlaying)
+                {
+                    audioSource.clip = walkSound;
+                    audioSource.Play();
+                }
+            }
+
             Vector3 lookDirection = new Vector3(agent.desiredVelocity.x, 0, agent.desiredVelocity.z);
             transform.rotation = Quaternion.LookRotation(lookDirection == Vector3.zero ? Vector3.forward : lookDirection, Vector3.up);
         }
+        else if (audioSource.isPlaying)
+            audioSource.Stop();
+            
     }
     void UpdateTimeElapsed()
     {
@@ -207,6 +228,8 @@ public class VictimAI : MonoBehaviour
     IEnumerator QueueRunAway()
     {
         yield return new WaitUntil(() => !interactingWithObjective);
+        if (dead)
+            yield break;
         StopAllCoroutines();
         StartCoroutine(RunAway(monster.transform.position));
     }
@@ -264,8 +287,12 @@ public class VictimAI : MonoBehaviour
             FearLevel += increase * Time.deltaTime / Length;
             if (FearLevel >= 1)
             {
-                StopAllCoroutines();
-                StartCoroutine(Die());
+                if (!dead)
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(Die());
+                }
+
                 yield break;
             }
             yield return null;
@@ -284,8 +311,9 @@ public class VictimAI : MonoBehaviour
         transform.rotation = Quaternion.LookRotation(lookDirection, Vector3.up);
         animator.Play(Animations.Spooked.ToString());
         expression.ChangeExpression(Expressions.Scared);
+        camera.enabled = true;
         yield return new WaitForSeconds(frozenLength);
-
+        camera.enabled = false;
         agent.isStopped = false;
         agent.speed = escapeSpeed;
 
@@ -416,10 +444,17 @@ public class VictimAI : MonoBehaviour
             animator.Play(animation.ToString());
         }
     }
+    bool dead = false;
     IEnumerator Die()
     {
+        agent.isStopped = true;
+        SetAnimation(Animations.Dying);
         audioManager.PlaySFX(3);
-        StartCoroutine(gameStateManager.Lose());
-        yield break;
+        expression.ChangeExpression(Expressions.Dead);
+        camera.enabled = true;
+        dead = true;
+        monster.firstPersonCameraInputs.enabled = false;
+        yield return new WaitForSeconds(2);
+        StartCoroutine(gameStateManager.Win());
     }
 }

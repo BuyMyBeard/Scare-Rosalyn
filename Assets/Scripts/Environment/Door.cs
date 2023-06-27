@@ -16,13 +16,14 @@ public class Door : Interactable
     Animator animator;
     BoxCollider doorTrigger;
     bool opened = false;
-
+    AudioManager audioManager;
 
     protected override void Awake()
     {
         base.Awake();
         animator = GetComponent<Animator>();
         doorTrigger = GetComponent<BoxCollider>();
+        audioManager = GetComponent<AudioManager>();
     }
     protected override void OnTriggerEnter(Collider other)
     {
@@ -61,6 +62,7 @@ public class Door : Interactable
     }
     IEnumerator Open()
     {
+        audioManager.PlaySFX(0);
         animator.Play("Open");
         StartCoroutine(BlockInteraction());
         //doorCollider.enabled = false;
@@ -72,6 +74,7 @@ public class Door : Interactable
     }
     IEnumerator Close()
     {
+        audioManager.PlaySFX(1);
         animator.Play("Close");
         StartCoroutine(BlockInteraction());
         //doorCollider.enabled = false;

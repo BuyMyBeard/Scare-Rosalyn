@@ -7,6 +7,7 @@ public class FenceGate : MonoBehaviour
     float totalDistance = 4.78f;
     public void Open()
     {
+        GetComponent<AudioManager>().PlaySFX(0);
         StartCoroutine(OpenAnimation());
     }
 

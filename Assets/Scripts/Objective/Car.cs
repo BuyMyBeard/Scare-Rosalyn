@@ -9,7 +9,10 @@ public class Car : Objective
     {
         Check();
         if (GetComponentInChildren<CarDoors>().MonsterInCar)
+        {
+            GetComponent<AudioSource>().Play();
             StartCoroutine(gameStateManager.Win());
+        }
         else
             StartCoroutine(gameStateManager.Lose());
     }

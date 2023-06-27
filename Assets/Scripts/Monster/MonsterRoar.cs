@@ -29,11 +29,8 @@ public class MonsterRoar : MonoBehaviour
             if (movement.frozen)
                 continue;
             audioManager.PlaySFX(0);
-            breathingSounds.volume = 0;
-            Debug.Log("Roared");
             victim.DetectMonsterRoar();
             yield return new WaitForSeconds(cooldown);
-            breathingSounds.volume = 1;
         }
     }
 }

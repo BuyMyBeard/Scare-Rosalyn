@@ -15,12 +15,14 @@ public class TV : Interactable
     SphereCollider trigger;
     VictimTrigger scareArea;
     bool hasScaredVictim = false;
+    AudioManager audioManager;
 
     protected override void Awake()
     {
         base.Awake();
         trigger = GetComponent<SphereCollider>();
         scareArea = GetComponentInChildren<VictimTrigger>();
+        audioManager = GetComponent<AudioManager>();
     }
     public void CollectRemote()
     {
@@ -35,6 +37,7 @@ public class TV : Interactable
         {
             promptMessage = "Turn off TV";
             animator.Play("Static");
+            audioManager.PlayLoop();
             if (!hasScaredVictim && scareArea.Triggered)
             {
                 victim.StartCoroutine(victim.RaiseProgressBarOverTime(terrorValue));
@@ -45,6 +48,7 @@ public class TV : Interactable
         {
             promptMessage = "Turn on TV";
             animator.Play("Off");
+            audioManager.StopLoop();
 
         }
     }

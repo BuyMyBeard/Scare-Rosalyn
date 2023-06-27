@@ -1,7 +1,6 @@
 using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.PlasticSCM.Editor.WebApi;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.AI;
@@ -16,7 +15,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float runMultiplier = 2;
     [SerializeField] float frozenLength = 3;
     [SerializeField] CinemachineVirtualCamera firstPersonCamera;
-    CinemachineInputProvider firstPersonCameraInputs;
+    public CinemachineInputProvider firstPersonCameraInputs;
     float fallingSpeed = 0;
     public bool frozen;
     PlayerInputs inputs;
@@ -24,9 +23,11 @@ public class PlayerMovement : MonoBehaviour
     Camera cam;
     Animator animator;
     MonsterAnimations currentAnimation;
+    [SerializeField] AudioClip walkSound, runSound;
     //CapsuleCollider collider;
     //SphereCollider sphereCollider;
     //NavMeshObstacle obstacle;
+    AudioSource audioSource;
     void Awake()
     {
         inputs = GetComponent<PlayerInputs>();
@@ -36,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
         //sphereCollider = GetComponentInChildren<SphereCollider>();
         cam = Camera.main;
         firstPersonCameraInputs = firstPersonCamera.GetComponent<CinemachineInputProvider>();
+        audioSource = GetComponent<AudioSource>();
         //obstacle = GetComponent<NavMeshObstacle>();
     }
 
@@ -49,18 +51,31 @@ public class PlayerMovement : MonoBehaviour
         if (movement ==  Vector3.zero)
         {
             SetAnimation(MonsterAnimations.Idle);
+            audioSource.Stop();
             return;
         }
         SetAnimation(MonsterAnimations.Walking);
         float currentSpeed = walkSpeed;
         if (inputs.RunInput && movement.z > 0)
         {
+            if (audioSource.clip != runSound || !audioSource.isPlaying)
+            {
+                audioSource.clip = runSound;
+                audioSource.Play();
+            }
             animator.speed = runMultiplier;
             movement.z *= runMultiplier;
             currentSpeed *= runMultiplier;
         }
         else
+        {
             animator.speed = 1;
+            if (audioSource.clip != walkSound || !audioSource.isPlaying)
+            {
+                audioSource.clip = walkSound;
+                audioSource.Play();
+            }
+        }
         movement = cam.transform.forward * movement.z + cam.transform.right * movement.x;
         movement.y = 0;
         controller.SimpleMove(currentSpeed * movement.normalized + fallingSpeed * Vector3.down);
@@ -79,6 +94,7 @@ public class PlayerMovement : MonoBehaviour
     }
     IEnumerator FreezePlayer(Transform victimToLookAt)
     {
+        audioSource.Stop();
         //obstacle.enabled = true;
         SetAnimation(MonsterAnimations.Idle);
         frozen = true;
