@@ -6,12 +6,17 @@ using UnityEngine.UI;
 public class BackgroundFade : MonoBehaviour
 {
     Image background;
+    [SerializeField] GameObject fearLevel, detectionLevel, tasklist, prompt;
     private void Awake()
     {
         background = GetComponent<Image>();
     }
     public bool Visible { get; private set; } = false;
     public bool Done { get; private set; } = true;
+    public void HidePrompt()
+    {
+        prompt.SetActive(false);
+    }
     public IEnumerator FadeIn(bool fadeOut = false)
     {
         if (!Done || Visible != fadeOut)
@@ -25,6 +30,10 @@ public class BackgroundFade : MonoBehaviour
             background.color = c;
             yield return null;
         }
+            fearLevel.SetActive(fadeOut);
+            detectionLevel.SetActive(fadeOut);
+            tasklist.SetActive(fadeOut);
+        
         Done = true;
     }
 }

@@ -9,11 +9,13 @@ public class MonsterRoar : MonoBehaviour
     PlayerInputs inputs;
     PlayerMovement movement;
     AudioManager audioManager;
+    AudioSource breathingSounds;
     void Awake()
     {
         inputs = GetComponent<PlayerInputs>();
         audioManager = GetComponent<AudioManager>();
         movement = GetComponent<PlayerMovement>();
+        breathingSounds = GetComponentInChildren<AudioSource>();
     }
     private void OnEnable()
     {
@@ -26,10 +28,12 @@ public class MonsterRoar : MonoBehaviour
             yield return new WaitUntil(() => inputs.RoarPress);
             if (movement.frozen)
                 continue;
-            //audioManager.PlaySFX(0);
+            audioManager.PlaySFX(0);
+            breathingSounds.volume = 0;
             Debug.Log("Roared");
             victim.DetectMonsterRoar();
             yield return new WaitForSeconds(cooldown);
+            breathingSounds.volume = 1;
         }
     }
 }

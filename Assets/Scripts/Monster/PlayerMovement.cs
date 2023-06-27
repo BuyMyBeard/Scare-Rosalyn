@@ -24,16 +24,16 @@ public class PlayerMovement : MonoBehaviour
     Camera cam;
     Animator animator;
     MonsterAnimations currentAnimation;
-    CapsuleCollider collider;
-    SphereCollider sphereCollider;
+    //CapsuleCollider collider;
+    //SphereCollider sphereCollider;
     //NavMeshObstacle obstacle;
     void Awake()
     {
         inputs = GetComponent<PlayerInputs>();
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        collider = GetComponent<CapsuleCollider>();
-        sphereCollider = GetComponentInChildren<SphereCollider>();
+        //collider = GetComponent<CapsuleCollider>();
+        //sphereCollider = GetComponentInChildren<SphereCollider>();
         cam = Camera.main;
         firstPersonCameraInputs = firstPersonCamera.GetComponent<CinemachineInputProvider>();
         //obstacle = GetComponent<NavMeshObstacle>();

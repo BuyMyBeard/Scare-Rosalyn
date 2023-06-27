@@ -12,18 +12,21 @@ public class GameStateManager : MonoBehaviour
         StopGame();
         yield return new WaitUntil(() => backgroundFade.Done);
         WinScreen.SetActive(true);
+        backgroundFade.HidePrompt();
+        Time.timeScale = 0;
     }
     public IEnumerator Lose()
     {
         StopGame();
         yield return new WaitUntil(() => backgroundFade.Done);
         LoseScreen.SetActive(true);
+        backgroundFade.HidePrompt();
+        Time.timeScale = 0;
     }
     public void StopGame()
     {
         StartCoroutine(backgroundFade.FadeIn());
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
-        Time.timeScale = 0;
     }
 }

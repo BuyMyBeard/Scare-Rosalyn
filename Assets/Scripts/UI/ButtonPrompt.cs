@@ -35,12 +35,12 @@ public class ButtonPrompt : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI textPrompt;
     [SerializeField] GameObject[] display;
-    [SerializeField] float cooldown = 0.5f;
+    //[SerializeField] float cooldown = 0.5f;
     [SerializeField] Transform monster;
     public List<Interactable> possiblePrompts = new();
     Interactable currentPrompt;
     PlayerInputs inputs;
-    bool onCooldown = false;
+    //bool onCooldown = false;
 
     void Awake()
     {

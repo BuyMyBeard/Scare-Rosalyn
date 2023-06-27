@@ -53,10 +53,12 @@ public class VictimAI : MonoBehaviour
     public float timeElapsedDetection = 0;
     public bool monsterInLOS = false, spooked = false, idle = false, lookingAround = false;
     public bool monsterHasRoared = false, lookingThroughGlass = false;
+    bool interactingWithObjective = false;
     int jumpscareCount = 0;
     float detectionProgress = 0;
     Animations currentAnimation = Animations.Idle;
     int nextObjective = 0;
+    AudioManager audioManager;
 
     public Objective CurrentObjective
     {
@@ -101,6 +103,7 @@ public class VictimAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
        expression = GetComponent<Expression>();
+        audioManager = GetComponent<AudioManager>();
     }
     private void OnEnable()
     {
@@ -132,7 +135,7 @@ public class VictimAI : MonoBehaviour
             timeElapsedDetection = 0;
             monsterHasRoared = false;
         }
-        else
+        else if (!interactingWithObjective)
             timeElapsedDetection += Time.deltaTime;
 
     }
@@ -191,16 +194,21 @@ public class VictimAI : MonoBehaviour
         else if (lookingAround)
             multiplier *= 8;
         DetectionProgress += Time.deltaTime * multiplier * detectionRate;
-        CheckDetectionProgress(other.transform);
+        CheckDetectionProgress();
     }
-    public void CheckDetectionProgress(Transform monster)
+    public void CheckDetectionProgress()
     {
         if (DetectionProgress >= 1)
         {
             DetectionProgress = 1;
-            StopAllCoroutines();
-            StartCoroutine(RunAway(monster.position));
+            StartCoroutine(QueueRunAway());
         }
+    }
+    IEnumerator QueueRunAway()
+    {
+        yield return new WaitUntil(() => !interactingWithObjective);
+        StopAllCoroutines();
+        StartCoroutine(RunAway(monster.transform.position));
     }
 
     public void StopDetectingMonster()
@@ -228,22 +236,28 @@ public class VictimAI : MonoBehaviour
         float increase = 0;
         Debug.Log(timeElapsedDetection);
         if (monsterHasRoared)
-            increase += 0.01f;
+            increase += 0.02f;
         if (lookingThroughGlass)
             increase += 0.1f;
         if (DistanceFromMonster > 10)
             increase += 0.01f;
-        else if (timeElapsedDetection > 1.5)
-            increase += 0.01f;
         else if (timeElapsedDetection > 1)
-            increase += 0.05f;
+            increase += 0.01f;
         else if (timeElapsedDetection > 0.5f)
+            increase += 0.05f;
+        else
             increase += 0.2f;
         StartCoroutine(RaiseProgressBarOverTime(increase));
     }
 
     public IEnumerator RaiseProgressBarOverTime(float increase)
     {
+        if (increase >= 0.15)
+            audioManager.PlaySFX(2);
+        else if (increase >= 0.10)
+            audioManager.PlaySFX(1);
+        else if (increase >= 0.05)
+            audioManager.PlaySFX(0);
         const float Length = 2;
         for (float t = 0; t < Length; t += Time.deltaTime)
         {
@@ -261,6 +275,7 @@ public class VictimAI : MonoBehaviour
     IEnumerator RunAway(Vector3 monsterLocation)
     {
         RaiseFear();
+        lookingThroughGlass = false;
         monster.StartFreeze(transform);
         spooked = true;
         agent.isStopped = true;
@@ -317,9 +332,11 @@ public class VictimAI : MonoBehaviour
         agent.isStopped = true;
         transform.eulerAngles = new Vector3(0, objective.angleToLookAt, 0);
         SetAnimation(Animations.Interact);
+        interactingWithObjective = true;
         yield return new WaitForSeconds(0.5f);
         objective.InteractionOver();
         yield return new WaitForSeconds(1);
+        interactingWithObjective = false;
         objective.done = true;
         agent.destination = FindNewObjective().objectivePosition.position;
         agent.isStopped = false;
@@ -368,8 +385,9 @@ public class VictimAI : MonoBehaviour
     {
         if (!spooked)
         {
+            lookingThroughGlass = false;
             DetectionProgress += 2 * Time.deltaTime;
-            CheckDetectionProgress(monster.transform);
+            CheckDetectionProgress();
         }
     }
     public void DetectMonsterRoar()
@@ -377,9 +395,10 @@ public class VictimAI : MonoBehaviour
         float distance = DistanceFromMonster;
         if (distance > roarHearRange)
             return;
+        lookingThroughGlass = false;
         monsterHasRoared = true;
         if (distance < 5)
-            DetectionProgress += 1;
+            DetectionProgress += 2;
         else
         {
             DetectionProgress += 0.25f;
@@ -387,7 +406,7 @@ public class VictimAI : MonoBehaviour
                 transform.Rotate(0, 180, 0);
             StartCoroutine(LookAround());
         }
-        CheckDetectionProgress(monster.transform);
+        CheckDetectionProgress();
     }
     void SetAnimation(Animations animation)
     {

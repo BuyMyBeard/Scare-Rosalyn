@@ -9,9 +9,9 @@ public class Car : Objective
     {
         Check();
         if (GetComponentInChildren<CarDoors>().MonsterInCar)
-            gameStateManager.Lose();
+            StartCoroutine(gameStateManager.Win());
         else
-            gameStateManager.Win();
+            StartCoroutine(gameStateManager.Lose());
     }
     private void OnTriggerEnter(Collider other)
     {

@@ -355,7 +355,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: How To play
+  m_text: How To Play
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b76c749fb3f50104590986d77dc4cd9e, type: 2}
   m_sharedMaterial: {fileID: 5283401211099482278, guid: b76c749fb3f50104590986d77dc4cd9e, type: 2}
@@ -566,7 +566,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: dd7828674d080c14a9b65d82a89d274d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 5dd23e83af5ce2543a42f22a9dcdb852, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1127,7 +1127,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2019534551f5a6a479aa66a945a0a9ec, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d3fd26c23814a5946a7bedf1d7cd4c6b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

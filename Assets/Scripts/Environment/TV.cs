@@ -33,6 +33,7 @@ public class TV : Interactable
         turnedOn = !turnedOn;
         if (turnedOn)
         {
+            promptMessage = "Turn off TV";
             animator.Play("Static");
             if (!hasScaredVictim && scareArea.Triggered)
             {
@@ -42,18 +43,10 @@ public class TV : Interactable
         }
         else
         {
+            promptMessage = "Turn on TV";
             animator.Play("Off");
 
         }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        Prompt();
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        CancelPrompt();
     }
 
     IEnumerator InitializationCooldown()
