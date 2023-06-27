@@ -13,6 +13,11 @@ public class AudioManager : MonoBehaviour
     }
     public void PlaySFX(int id)
     {
+        StartCoroutine(DelaySound(id));
+    }
+    IEnumerator DelaySound(int id)
+    {
+        yield return new WaitForSeconds(0.1f);
         sfxSource.PlayOneShot(sfx[id], 1);
     }
 

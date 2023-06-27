@@ -225,6 +225,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   openDoorAnimationLength: 0
+  gameStateManager: {fileID: 0}
   timeElapsedDetection: 0
   monsterInLOS: 0
   spooked: 0
@@ -232,6 +233,8 @@ MonoBehaviour:
   lookingAround: 0
   monsterHasRoared: 0
   lookingThroughGlass: 0
+  walkSound: {fileID: 0}
+  runSound: {fileID: 0}
 --- !u!114 &1063333588179484809
 MonoBehaviour:
   m_ObjectHideFlags: 0
