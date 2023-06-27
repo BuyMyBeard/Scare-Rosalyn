@@ -17,7 +17,7 @@ public class GameStateManager : MonoBehaviour
     {
         StopGame();
         yield return new WaitUntil(() => backgroundFade.Done);
-        LoseScreen.SetActive(false);
+        LoseScreen.SetActive(true);
     }
     public void StopGame()
     {
