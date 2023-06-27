@@ -54,7 +54,7 @@ public class VictimAI : MonoBehaviour
     public bool monsterInLOS = false, spooked = false, idle = false, lookingAround = false;
     public bool monsterHasRoared = false, lookingThroughGlass = false;
     bool interactingWithObjective = false;
-    int jumpscareCount = 0;
+    //int jumpscareCount = 0;
     float detectionProgress = 0;
     Animations currentAnimation = Animations.Idle;
     int nextObjective = 0;
@@ -265,7 +265,7 @@ public class VictimAI : MonoBehaviour
             if (FearLevel >= 1)
             {
                 StopAllCoroutines();
-                Die();
+                StartCoroutine(Die());
                 yield break;
             }
             yield return null;
@@ -344,7 +344,7 @@ public class VictimAI : MonoBehaviour
 
     IEnumerator WaitAround(Objective objective)
     {
-        if (spooked || FearLevel > 0.3f)
+        if (spooked || FearLevel > 0.6f)
         {
             agent.destination = FindNewObjective().objectivePosition.position;
             objective.done = true;
@@ -361,7 +361,7 @@ public class VictimAI : MonoBehaviour
 
     IEnumerator Sit(Objective objective)
     {
-        if (spooked || FearLevel > 0.3f)
+        if (spooked || FearLevel > 0.45f)
         {
             agent.destination = FindNewObjective().objectivePosition.position;
             objective.done = true;
@@ -418,6 +418,7 @@ public class VictimAI : MonoBehaviour
     }
     IEnumerator Die()
     {
+        audioManager.PlaySFX(3);
         StartCoroutine(gameStateManager.Lose());
         yield break;
     }
