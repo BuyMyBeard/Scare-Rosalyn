@@ -22,6 +22,14 @@ public abstract class Interactable : MonoBehaviour
         buttonPrompt.CancelPrompt(this);
     }    
     public abstract void Interact();
+    protected virtual void OnTriggerEnter(Collider other)
+    {
+        Prompt();
+    }
+    protected virtual void OnTriggerExit(Collider other)
+    {
+        CancelPrompt();
+    }
 }
 public class ButtonPrompt : MonoBehaviour
 {

@@ -10,12 +10,4 @@ public class TVRemote : Interactable
         tv.CollectRemote();
         gameObject.SetActive(false);
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        Prompt();
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        CancelPrompt();
-    }
 }

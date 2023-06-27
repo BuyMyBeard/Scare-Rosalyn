@@ -198,31 +198,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   goal: {fileID: 0}
-  detectionCoefficient: 0.05
+  detectionRate: 1
   detectionDecayRate: 0.001
   detectionLingerLength: 2
   detectionMeter: {fileID: 0}
   obstructionLayer:
     serializedVersion: 2
     m_Bits: 0
-  escapeDistance: 20
+  glassLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  detectionSoftRange: 5
+  roarHearRange: 15
   escapeSpeed: 0
   frozenLength: 1
+  fleeingLength: 5
   fearMeter: {fileID: 0}
   monster: {fileID: 0}
+  monsterLayer:
+    serializedVersion: 2
+    m_Bits: 0
   objectives: []
-  finalObjective: {fileID: 0}
   walkSpeed: 0
   minDistanceFromTarget: 0.2
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
-  raycastStartHeight: -10
-  raycastLength: 20
   openDoorAnimationLength: 0
+  timeElapsedDetection: 0
   monsterInLOS: 0
   spooked: 0
   idle: 0
+  lookingAround: 0
+  monsterHasRoared: 0
+  lookingThroughGlass: 0
 --- !u!114 &1063333588179484809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,6 +418,18 @@ PrefabInstance:
       value: 180
       objectReference: {fileID: 0}
     - target: {fileID: -8589819023069508059, guid: 75355fbd49b16ee4c80b7fdb061d8d8f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8589819023069508059, guid: 75355fbd49b16ee4c80b7fdb061d8d8f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8589819023069508059, guid: 75355fbd49b16ee4c80b7fdb061d8d8f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8589819023069508059, guid: 75355fbd49b16ee4c80b7fdb061d8d8f, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
@@ -467,6 +488,14 @@ PrefabInstance:
     - target: {fileID: -6953770775849073945, guid: 75355fbd49b16ee4c80b7fdb061d8d8f, type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -6953770775849073945, guid: 75355fbd49b16ee4c80b7fdb061d8d8f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -6953770775849073945, guid: 75355fbd49b16ee4c80b7fdb061d8d8f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.9999999
       objectReference: {fileID: 0}
     - target: {fileID: -6953770775849073945, guid: 75355fbd49b16ee4c80b7fdb061d8d8f, type: 3}
       propertyPath: m_LocalRotation.w

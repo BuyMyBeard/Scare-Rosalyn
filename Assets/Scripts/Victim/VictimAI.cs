@@ -46,6 +46,7 @@ public class VictimAI : MonoBehaviour
     //[SerializeField] float raycastStartHeight;
     //[SerializeField] float raycastLength;
     [SerializeField] float openDoorAnimationLength;
+    [SerializeField] GameStateManager gameStateManager;
     
 
     [Header("Debug")]
@@ -182,6 +183,8 @@ public class VictimAI : MonoBehaviour
                 detectionDecayCoroutine = null;
             }
         }
+        if (monster.frozen)
+            return;
         float multiplier = 1;
         if (direction.magnitude < detectionSoftRange)
             multiplier *= 4;
@@ -245,6 +248,12 @@ public class VictimAI : MonoBehaviour
         for (float t = 0; t < Length; t += Time.deltaTime)
         {
             FearLevel += increase * Time.deltaTime / Length;
+            if (FearLevel >= 1)
+            {
+                StopAllCoroutines();
+                Die();
+                yield break;
+            }
             yield return null;
         }
     }
@@ -252,7 +261,7 @@ public class VictimAI : MonoBehaviour
     IEnumerator RunAway(Vector3 monsterLocation)
     {
         RaiseFear();
-        monster.Freeze(transform);
+        monster.StartFreeze(transform);
         spooked = true;
         agent.isStopped = true;
         Vector3 lookDirection = monsterLocation - transform.position;
@@ -387,5 +396,10 @@ public class VictimAI : MonoBehaviour
             currentAnimation = animation;
             animator.Play(animation.ToString());
         }
+    }
+    IEnumerator Die()
+    {
+        StartCoroutine(gameStateManager.Lose());
+        yield break;
     }
 }

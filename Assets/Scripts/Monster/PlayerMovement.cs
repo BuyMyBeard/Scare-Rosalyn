@@ -24,12 +24,16 @@ public class PlayerMovement : MonoBehaviour
     Camera cam;
     Animator animator;
     MonsterAnimations currentAnimation;
+    CapsuleCollider collider;
+    SphereCollider sphereCollider;
     //NavMeshObstacle obstacle;
     void Awake()
     {
         inputs = GetComponent<PlayerInputs>();
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        collider = GetComponent<CapsuleCollider>();
+        sphereCollider = GetComponentInChildren<SphereCollider>();
         cam = Camera.main;
         firstPersonCameraInputs = firstPersonCamera.GetComponent<CinemachineInputProvider>();
         //obstacle = GetComponent<NavMeshObstacle>();
@@ -69,7 +73,7 @@ public class PlayerMovement : MonoBehaviour
             animator.Play(currentAnimation.ToString());
         }
     }
-    public void Freeze(Transform victimToLookAt)
+    public void StartFreeze(Transform victimToLookAt)
     {
         StartCoroutine(FreezePlayer(victimToLookAt));
     }
@@ -86,5 +90,19 @@ public class PlayerMovement : MonoBehaviour
         //firstPersonCamera.LookAt = null;
         firstPersonCameraInputs.enabled = true;
         //obstacle.enabled = false;
+    }
+    public void EnterCar()
+    {
+        frozen = true;
+        firstPersonCameraInputs.enabled = false;
+        //collider.enabled = false;
+        //sphereCollider.enabled = false;
+    }
+    public void ExitCar()
+    {
+        frozen = false;
+        firstPersonCameraInputs.enabled = true;
+        //collider.enabled = true;
+        //sphereCollider.enabled = true;
     }
 }

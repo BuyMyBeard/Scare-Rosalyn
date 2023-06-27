@@ -24,7 +24,7 @@ public class Door : Interactable
         animator = GetComponent<Animator>();
         doorTrigger = GetComponent<BoxCollider>();
     }
-    private void OnTriggerEnter(Collider other)
+    protected override void OnTriggerEnter(Collider other)
     {
         if (playerLayer.IncludesLayer(other.gameObject.layer))
         {
@@ -39,7 +39,7 @@ public class Door : Interactable
             }
         }
     }
-    private void OnTriggerExit(Collider other)
+    protected override void OnTriggerExit(Collider other)
     {
         if (playerLayer.IncludesLayer(other.gameObject.layer))
         {
@@ -68,7 +68,7 @@ public class Door : Interactable
         //doorCollider.enabled = true;
         opened = true;
         obstacle.enabled = true;
-
+        promptMessage = "Close door";
     }
     IEnumerator Close()
     {
@@ -79,6 +79,7 @@ public class Door : Interactable
         //doorCollider.enabled = true;
         opened = false;
         obstacle.enabled = false;
+        promptMessage = "Open door";
     }
 
     IEnumerator BlockInteraction()

@@ -5,8 +5,9 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputs : MonoBehaviour
 {
+    [SerializeField] GameObject pauseMenu;
     [SerializeField] float inputBuffer = 0.1f;
-    InputAction runAction, roarAction, interactAction;
+    InputAction runAction, roarAction, interactAction, pauseAction;
     InputMap inputs;
     void Awake()
     {
@@ -14,6 +15,7 @@ public class PlayerInputs : MonoBehaviour
         runAction = inputs.FindAction("Run");
         roarAction = inputs.FindAction("Roar");
         interactAction = inputs.FindAction("Interact");
+        pauseAction = inputs.FindAction("Pause");
     }
     private void OnEnable()
     {
@@ -24,6 +26,22 @@ public class PlayerInputs : MonoBehaviour
         roarAction.canceled += _ => RoarInput = false;
         interactAction.started += _ => { InteractInput = true; StartCoroutine(BufferInteract()); };
         interactAction.canceled += _ => InteractInput = false;
+        pauseAction.started += _ =>
+        {
+            if (Time.timeScale == 0)
+            {
+                pauseMenu.SetActive(false);
+                Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
+                Time.timeScale = 1;
+            } else
+            {
+                pauseMenu.SetActive(true);
+                Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
+                Time.timeScale = 0;
+            }
+        };
     }
 
     private void OnDisable()

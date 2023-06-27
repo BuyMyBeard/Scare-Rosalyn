@@ -81,7 +81,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1505c3f9211dcbc4eaac1c7950ebbf12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  promptMessage: Interact
+  promptMessage: Open door
   doorCollider: {fileID: 5787581996845302635}
   playerLayer:
     serializedVersion: 2
