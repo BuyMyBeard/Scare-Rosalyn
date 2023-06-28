@@ -8,17 +8,21 @@ public class Lever : Objective
     Animator animator;
     BoxCollider trigger;
     [SerializeField] Animator fenceAnimator;
-    [SerializeField] FenceGate fenceGate;
-
+    [SerializeField]AudioSource audioSource;
     public override void InteractionOver()
     {
         animator.Play("On");
-        //fenceGate.Open();
         fenceAnimator.Play("Open");
+        StartCoroutine(PlayGateSound());
         trigger.enabled = false;
         Check();
     }
-
+    IEnumerator PlayGateSound()
+    {
+        audioSource.Play();
+        yield return new WaitForSeconds(8);
+        audioSource.Stop();
+    }
 
     void Awake()
     {

@@ -11,7 +11,6 @@ public static class GameSettings
         get => brightness;
         set
         {
-
             brightness = value;
             PlayerPrefs.SetFloat("Brightness", value);
         }
@@ -79,7 +78,7 @@ public static class GameSettings
     static void LoadPlayerPrefs()
     {
         Brightness = PlayerPrefs.GetFloat("Brightness", 1);
-        MouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 0.5f);
+        MouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 10f);
         MusicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
         SFXVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
         _ToggleRun = PlayerPrefs.GetInt("ToggleRun", 0);

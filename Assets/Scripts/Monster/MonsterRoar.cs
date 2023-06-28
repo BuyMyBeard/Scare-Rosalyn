@@ -26,8 +26,7 @@ public class MonsterRoar : MonoBehaviour
             yield return new WaitUntil(() => inputs.RoarPress);
             if (movement.frozen)
                 continue;
-            audioManager.PlaySFX(0);
-            Debug.Log("Roared");
+            audioManager.PlaySFX(0, 1.5f);
             victim.DetectMonsterRoar();
             yield return new WaitForSeconds(cooldown);
         }

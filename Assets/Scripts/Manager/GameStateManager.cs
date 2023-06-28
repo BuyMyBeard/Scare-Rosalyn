@@ -7,6 +7,8 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] GameObject WinScreen;
     [SerializeField] GameObject LoseScreen;
     [SerializeField] BackgroundFade backgroundFade;
+    [SerializeField] GameObject PauseMenu;
+    public bool GameEnded { get; private set; } = false;
     public IEnumerator Win()
     {
         StopGame();
@@ -28,5 +30,7 @@ public class GameStateManager : MonoBehaviour
         StartCoroutine(backgroundFade.FadeIn());
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
+        GameEnded = true;
+        PauseMenu.SetActive(false);
     }
 }

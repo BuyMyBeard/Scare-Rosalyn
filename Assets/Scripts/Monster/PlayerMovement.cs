@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 
 enum MonsterAnimations { Idle, Walking };
 
@@ -14,16 +15,18 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float walkSpeed = 1;
     [SerializeField] float runMultiplier = 2;
     [SerializeField] float frozenLength = 3;
-    [SerializeField] CinemachineVirtualCamera firstPersonCamera;
-    public CinemachineInputProvider firstPersonCameraInputs;
     public bool frozen = false;
     bool runToggleMode, runToggled = false;
     PlayerInputs inputs;
     CharacterController controller;
     Camera cam;
     Animator animator;
+    float mouseSensitivity;
+    float verticalRotation = 0;
+    [SerializeField] Transform head;
     MonsterAnimations currentAnimation;
     [SerializeField] AudioClip walkSound, runSound;
+    [SerializeField] int verticalClamp = 90;
     //CapsuleCollider collider;
     //SphereCollider sphereCollider;
     //NavMeshObstacle obstacle;
@@ -36,18 +39,24 @@ public class PlayerMovement : MonoBehaviour
         //collider = GetComponent<CapsuleCollider>();
         //sphereCollider = GetComponentInChildren<SphereCollider>();
         cam = Camera.main;
-        firstPersonCameraInputs = firstPersonCamera.GetComponent<CinemachineInputProvider>();
         audioSource = GetComponent<AudioSource>();
         //obstacle = GetComponent<NavMeshObstacle>();
-        UpdateRunToggle();
+        UpdateSettings();
     }
 
     void Update()
     {
         if (frozen)
             return;
-        Vector3 lookDirection = new Vector3(0, cam.transform.eulerAngles.y - 6.72f, 0);
-        transform.eulerAngles = lookDirection;
+        Vector2 delta = mouseSensitivity * Time.deltaTime * Mouse.current.delta.ReadValue();
+
+        verticalRotation -= delta.y;
+        verticalRotation = Mathf.Clamp(verticalRotation, -verticalClamp, verticalClamp);
+        head.localRotation = Quaternion.Euler(verticalRotation, 0, 0);
+
+        transform.Rotate(Vector3.up * delta.x);
+        //Vector3 lookDirection = new Vector3(0, cam.transform.eulerAngles.y - 6.72f, 0);
+        //transform.eulerAngles = lookDirection;
         Vector3 movement = new Vector3(inputs.MoveInput.x, 0, inputs.MoveInput.y);
         if (movement ==  Vector3.zero)
         {
@@ -105,31 +114,28 @@ public class PlayerMovement : MonoBehaviour
         //obstacle.enabled = true;
         SetAnimation(MonsterAnimations.Idle);
         frozen = true;
-        firstPersonCameraInputs.enabled = false;
         //firstPersonCamera.LookAt = victimToLookAt;
         
         yield return new WaitForSeconds(frozenLength);
         frozen = false;
         //firstPersonCamera.LookAt = null;
-        firstPersonCameraInputs.enabled = true;
         //obstacle.enabled = false;
     }
     public void EnterCar()
     {
         frozen = true;
-        firstPersonCameraInputs.enabled = false;
         //collider.enabled = false;
         //sphereCollider.enabled = false;
     }
     public void ExitCar()
     {
         frozen = false;
-        firstPersonCameraInputs.enabled = true;
         //collider.enabled = true;
         //sphereCollider.enabled = true;
     }
-    public void UpdateRunToggle()
+    public void UpdateSettings()
     {
         runToggleMode = GameSettings.ToggleRun;
+        mouseSensitivity = GameSettings.MouseSensitivity;
     }
 }

@@ -7,6 +7,7 @@ public class PlayerInputs : MonoBehaviour
 {
     [SerializeField] GameObject pauseMenu;
     [SerializeField] float inputBuffer = 0.1f;
+    [SerializeField] GameStateManager gameStateManager;
     InputAction runAction, roarAction, interactAction, pauseAction;
     InputMap inputs;
     void Awake()
@@ -28,12 +29,15 @@ public class PlayerInputs : MonoBehaviour
         interactAction.canceled += _ => InteractInput = false;
         pauseAction.started += _ =>
         {
+            if (gameStateManager.GameEnded)
+                return;
             if (Time.timeScale == 0)
             {
                 pauseMenu.SetActive(false);
                 Cursor.lockState = CursorLockMode.Locked;
                 Cursor.visible = false;
                 Time.timeScale = 1;
+
             } else
             {
                 pauseMenu.SetActive(true);
