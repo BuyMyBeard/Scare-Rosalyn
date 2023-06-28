@@ -16,8 +16,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float frozenLength = 3;
     [SerializeField] CinemachineVirtualCamera firstPersonCamera;
     public CinemachineInputProvider firstPersonCameraInputs;
-    float fallingSpeed = 0;
-    public bool frozen;
+    public bool frozen = false;
+    bool runToggleMode, runToggled = false;
     PlayerInputs inputs;
     CharacterController controller;
     Camera cam;
@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
         firstPersonCameraInputs = firstPersonCamera.GetComponent<CinemachineInputProvider>();
         audioSource = GetComponent<AudioSource>();
         //obstacle = GetComponent<NavMeshObstacle>();
+        UpdateRunToggle();
     }
 
     void Update()
@@ -50,14 +51,19 @@ public class PlayerMovement : MonoBehaviour
         Vector3 movement = new Vector3(inputs.MoveInput.x, 0, inputs.MoveInput.y);
         if (movement ==  Vector3.zero)
         {
+            runToggled = false;
             SetAnimation(MonsterAnimations.Idle);
             audioSource.Stop();
             return;
         }
         SetAnimation(MonsterAnimations.Walking);
         float currentSpeed = walkSpeed;
-        if (inputs.RunInput && movement.z > 0)
+        if ((runToggled || inputs.RunInput) && movement.z > 0)
         {
+            if (runToggleMode && inputs.RunTap)
+            {
+                runToggled = !runToggled;
+            }
             if (audioSource.clip != runSound || !audioSource.isPlaying)
             {
                 audioSource.clip = runSound;
@@ -69,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            runToggled = false;
             animator.speed = 1;
             if (audioSource.clip != walkSound || !audioSource.isPlaying)
             {
@@ -78,7 +85,7 @@ public class PlayerMovement : MonoBehaviour
         }
         movement = cam.transform.forward * movement.z + cam.transform.right * movement.x;
         movement.y = 0;
-        controller.SimpleMove(currentSpeed * movement.normalized + fallingSpeed * Vector3.down);
+        controller.SimpleMove(currentSpeed * movement.normalized);
     }
     void SetAnimation(MonsterAnimations animation)
     {
@@ -120,5 +127,9 @@ public class PlayerMovement : MonoBehaviour
         firstPersonCameraInputs.enabled = true;
         //collider.enabled = true;
         //sphereCollider.enabled = true;
+    }
+    public void UpdateRunToggle()
+    {
+        runToggleMode = GameSettings.ToggleRun;
     }
 }

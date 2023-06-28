@@ -105,7 +105,7 @@ public class VictimAI : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         expression = GetComponent<Expression>();
-        audioManager = GetComponent<AudioManager>();
+        audioManager = GetComponentInChildren<AudioManager>();
         camera = GetComponentInChildren<Camera>();
         audioSource = GetComponent<AudioSource>();
     }

@@ -20,7 +20,7 @@ public class PlayerInputs : MonoBehaviour
     private void OnEnable()
     {
         inputs.Enable();
-        runAction.started += _ => RunInput = true;
+        runAction.started += _ => { RunInput = true; StartCoroutine(TapRun()); };
         runAction.canceled += _ => RunInput = false;
         roarAction.started += _ => { RoarInput = true; StartCoroutine(BufferRoar()); };
         roarAction.canceled += _ => RoarInput = false;
@@ -56,12 +56,14 @@ public class PlayerInputs : MonoBehaviour
     {
         get => inputs.Player.Look.ReadValue<Vector2>();
     }
-    public bool RunInput { get; private set; }
-    public bool InteractInput { get; private set; }
-    public bool InteractPress { get; private set; }
+    public bool RunInput { get; private set; } = false;
+    public bool RunTap { get; private set; } = false;
 
-    public bool RoarInput { get; private set; }
-    public bool RoarPress { get; private set; }
+    public bool InteractInput { get; private set; } = false;
+    public bool InteractPress { get; private set; } = false;
+
+    public bool RoarInput { get; private set; } = false;
+    public bool RoarPress { get; private set; } = false;
     IEnumerator BufferRoar()
     {
         RoarPress = true;
@@ -73,5 +75,11 @@ public class PlayerInputs : MonoBehaviour
         InteractPress = true;
         yield return new WaitForSecondsRealtime(inputBuffer);
         InteractPress = false;
+    }
+    IEnumerator TapRun()
+    {
+        RunTap = true;
+        yield return new WaitForEndOfFrame();
+        RunTap = false;
     }
 }

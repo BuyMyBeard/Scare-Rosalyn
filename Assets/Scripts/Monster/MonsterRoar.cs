@@ -9,13 +9,11 @@ public class MonsterRoar : MonoBehaviour
     PlayerInputs inputs;
     PlayerMovement movement;
     AudioManager audioManager;
-    AudioSource breathingSounds;
     void Awake()
     {
         inputs = GetComponent<PlayerInputs>();
-        audioManager = GetComponent<AudioManager>();
+        audioManager = GetComponentInChildren<AudioManager>();
         movement = GetComponent<PlayerMovement>();
-        breathingSounds = GetComponentInChildren<AudioSource>();
     }
     private void OnEnable()
     {

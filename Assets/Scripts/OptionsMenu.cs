@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
+using UnityEngine.Audio;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class OptionsMenu : MonoBehaviour
@@ -8,7 +11,9 @@ public class OptionsMenu : MonoBehaviour
 
     [SerializeField] Slider sfxSlider, musicSlider, mouseSensSlider, brightnessSlider;
     [SerializeField] Checkbox nightVisionCheckbox, toggleRunCheckbox;
-    [SerializeField] ISettingsListener[] settingsListeners;
+    [SerializeField] AudioMixer audioMixer;
+    [SerializeField] UnityEvent settingsChanged = new();
+
     void Awake()
     {
         sfxSlider.value = GameSettings.SFXVolume;
@@ -19,50 +24,41 @@ public class OptionsMenu : MonoBehaviour
         toggleRunCheckbox.Value = GameSettings.ToggleRun;
         
         brightnessSlider.interactable = nightVisionCheckbox.Value;
-
+        UpdateMusic();
+        UpdateSFX();
     }
+    void UpdateSFX() => audioMixer.SetFloat("SFXVolume", Mathf.Log10(GameSettings.SFXVolume) * 20);
+    void UpdateMusic() => audioMixer.SetFloat("MusicVolume", Mathf.Log10(GameSettings.MusicVolume) * 20);
+
     public void SFXChanged()
     {
         GameSettings.SFXVolume = sfxSlider.value;
-        WarnListerers();
+        UpdateSFX();
     }
     public void MusicChanged()
     {
         GameSettings.MusicVolume = musicSlider.value;
-        WarnListerers();
+        UpdateMusic();
     }
     public void MouseSensChanged()
     {
         GameSettings.MouseSensitivity = mouseSensSlider.value;
-        WarnListerers();
+        settingsChanged.Invoke();
     }
     public void BrightnessChanged()
     {
         GameSettings.Brightness = brightnessSlider.value;
-        WarnListerers();
+        settingsChanged.Invoke();
     }
     public void ToggleRunChanged()
     {
         GameSettings.ToggleRun = toggleRunCheckbox.Value;
-        WarnListerers();
+        settingsChanged.Invoke();
     }
     public void NightVisionChanged()
     {
         GameSettings.NightVisionShader = nightVisionCheckbox.Value;
         brightnessSlider.interactable = nightVisionCheckbox.Value;
-        WarnListerers();
+        settingsChanged.Invoke();
     }
-    void WarnListerers()
-    {
-        if (settingsListeners == null)
-            return;
-        foreach (var s in settingsListeners)
-            s.SettingsUpdated();
-    }
-}
-
-
-public interface ISettingsListener
-{
-    public void SettingsUpdated();
 }

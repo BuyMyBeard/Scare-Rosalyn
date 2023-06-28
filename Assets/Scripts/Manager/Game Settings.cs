@@ -80,8 +80,8 @@ public static class GameSettings
     {
         Brightness = PlayerPrefs.GetFloat("Brightness", 1);
         MouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 0.5f);
-        MusicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
-        SFXVolume = PlayerPrefs.GetFloat("SFXVolume", 1);
+        MusicVolume = PlayerPrefs.GetFloat("MusicVolume", 1f);
+        SFXVolume = PlayerPrefs.GetFloat("SFXVolume", 1f);
         _ToggleRun = PlayerPrefs.GetInt("ToggleRun", 0);
         _NightVisionShader = PlayerPrefs.GetInt("NightVisionShader", 1);
 

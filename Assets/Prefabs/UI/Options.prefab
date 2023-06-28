@@ -121,10 +121,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 9163195535709733955}
   m_HandleRect: {fileID: 2018107721685960319}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.01
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1848,7 +1848,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.6415094, g: 0.60822356, b: 0.60822356, a: 0.5019608}
+    m_DisabledColor: {r: 0.5, g: 0.5, b: 0.5, a: 0.30588236}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1867,8 +1867,8 @@ MonoBehaviour:
   m_FillRect: {fileID: 2172092323062706179}
   m_HandleRect: {fileID: 9021426967395343268}
   m_Direction: 0
-  m_MinValue: 0.5
-  m_MaxValue: 5
+  m_MinValue: 0.15
+  m_MaxValue: 3.5
   m_WholeNumbers: 0
   m_Value: 2.19
   m_OnValueChanged:
@@ -2214,6 +2214,10 @@ MonoBehaviour:
   brightnessSlider: {fileID: 5288228912796536917}
   nightVisionCheckbox: {fileID: 1728195756136489773}
   toggleRunCheckbox: {fileID: 9219184430460846093}
+  audioMixer: {fileID: 24100000, guid: c424dfb579104294193a5fb320810ccc, type: 2}
+  settingsChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &7904009590134334747
 GameObject:
   m_ObjectHideFlags: 0
@@ -2655,10 +2659,10 @@ MonoBehaviour:
   m_FillRect: {fileID: 6793028201989888300}
   m_HandleRect: {fileID: 5484918645301001585}
   m_Direction: 0
-  m_MinValue: 0
+  m_MinValue: 0.01
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
