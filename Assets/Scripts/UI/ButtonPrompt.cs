@@ -49,7 +49,7 @@ public class ButtonPrompt : MonoBehaviour
     void Update()
     {
         
-        if (currentPrompt != null && inputs.InteractPress)
+        if (currentPrompt != null && inputs.InteractPress && Time.timeScale != 0)
         {
             currentPrompt.Interact();
             CancelPrompt(currentPrompt);

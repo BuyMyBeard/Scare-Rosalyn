@@ -99,13 +99,13 @@ public class VictimAI : MonoBehaviour
     Animator animator;
     Expression expression;
     IEnumerator detectionDecayCoroutine, periodicallyLookAroundCoroutine;
-    Camera camera;
+    new Camera camera;
     void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         expression = GetComponent<Expression>();
-        audioManager = GetComponent<AudioManager>();
+        audioManager = GetComponentInChildren<AudioManager>();
         camera = GetComponentInChildren<Camera>();
         audioSource = GetComponent<AudioSource>();
     }
@@ -257,7 +257,6 @@ public class VictimAI : MonoBehaviour
     void RaiseFear()
     {
         float increase = 0;
-        Debug.Log(timeElapsedDetection);
         if (monsterHasRoared)
             increase += 0.02f;
         if (lookingThroughGlass)
@@ -453,7 +452,7 @@ public class VictimAI : MonoBehaviour
         expression.ChangeExpression(Expressions.Dead);
         camera.enabled = true;
         dead = true;
-        monster.firstPersonCameraInputs.enabled = false;
+        monster.frozen = true;
         yield return new WaitForSeconds(2);
         StartCoroutine(gameStateManager.Win());
     }
