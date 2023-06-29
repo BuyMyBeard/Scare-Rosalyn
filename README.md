@@ -1,7 +1,7 @@
 # Scare Rosalyn!
 **Learn You a Game Jam: Pixel Edition submission**
 
-[Download the game here](https://github.com/BuyMyBeard/Scare-Rosalyn/Releases/tags/v1.1.1) (Better experience) or
+[Download the game here](https://github.com/BuyMyBeard/Scare-Rosalyn/releases/tag/v1.1.1) (Better experience) or
 [Play here in the browser!](https://buymybeard.github.io/Scare-Rosalyn/) (don't forget to scroll down and press the fullscreen button)
 
 ![thumbnail](https://github.com/BuyMyBeard/Scare-Rosalyn/assets/95039323/9a399de1-2fc5-4ae5-9437-c1e72e44d12c)
